@@ -1,3 +1,4 @@
+// ── Constants ──
 const SHEET_DATA = "Cases total value";
 const SHEET_HISTORY = "Cases value history";
 
@@ -18,7 +19,7 @@ function onOpen() {
     .createMenu("Steam Tracker")
     .addItem("Fetch prices", "updateFromGitHub")
     .addSeparator()
-    .addItem("Save snapshot", "record")
+    .addItem("Save snapshot", "saveSnapshotToHistory")
     .addToUi();
 }
 
@@ -60,7 +61,7 @@ function updateFromGitHub() {
   );
 }
 
-function record() {
+function saveSnapshotToHistory() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const data = ss.getSheetByName(SHEET_DATA);
   const hist = ss.getSheetByName(SHEET_HISTORY);
@@ -70,4 +71,23 @@ function record() {
     data.getRange(ROW_TOTALS, COL_PROFIT).getValue(),
     new Date(),
   ]);
+}
+
+function installDailyTriggers() {
+  // Clear any existing daily triggers
+  ScriptApp.getProjectTriggers()
+    .filter((t) => t.getEventType() === ScriptApp.EventType.CLOCK)
+    .forEach((t) => ScriptApp.deleteTrigger(t));
+
+  ScriptApp.newTrigger("updateFromGitHub")
+    .timeBased()
+    .atHour(5)
+    .everyDays(1)
+    .create();
+
+  ScriptApp.newTrigger("saveSnapshotToHistory")
+    .timeBased()
+    .atHour(6)
+    .everyDays(1)
+    .create();
 }
