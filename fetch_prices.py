@@ -1,4 +1,5 @@
 import json
+import re
 import time
 from datetime import datetime, timezone
 from urllib.parse import quote as urlquote
@@ -6,6 +7,16 @@ from urllib.parse import quote as urlquote
 import requests
 
 BASE_URL: str = "https://steamcommunity.com/market/priceoverview/?currency=3&appid=730&market_hash_name="
+
+_DASH_CENTS = re.compile(r"(\d),--(\s*€)")
+
+
+def _normalize_price(price: str | None) -> str | None:
+    """Convert prices like '6,--€' to '6,00€'."""
+    if price is None:
+        return None
+    return _DASH_CENTS.sub(r"\1,00\2", price)
+
 
 ITEMS: list[str] = [
     "Chroma 2 Case",
@@ -56,8 +67,8 @@ def fetch_price(name: str) -> dict[str, str | None]:
             if data.get("success"):
                 return {
                     "name": name,
-                    "median_price": data.get("median_price"),
-                    "lowest_price": data.get("lowest_price"),
+                    "median_price": _normalize_price(data.get("median_price")),
+                    "lowest_price": _normalize_price(data.get("lowest_price")),
                     "volume": data.get("volume"),
                 }
 
