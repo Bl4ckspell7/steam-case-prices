@@ -7,16 +7,12 @@ from urllib.parse import quote as urlquote
 import requests
 
 BASE_URL: str = "https://steamcommunity.com/market/priceoverview/?currency=3&appid=730&market_hash_name="
+DELAY_SEC: float = 4.0
+MAX_RETRIES: int = 3
+RETRY_BACKOFF_SEC: float = 15.0
+TIMEOUT_SEC: int = 15
 
 _DASH_CENTS = re.compile(r"(\d),--(\s*€)")
-
-
-def _normalize_price(price: str | None) -> str | None:
-    """Convert prices like '6,--€' to '6,00€'."""
-    if price is None:
-        return None
-    return _DASH_CENTS.sub(r"\1,00\2", price)
-
 
 ITEMS: list[str] = [
     "Chroma 2 Case",
@@ -49,10 +45,12 @@ ITEMS: list[str] = [
     "Spectrum Case",
 ]
 
-DELAY_SEC: float = 5.0
-MAX_RETRIES: int = 3
-RETRY_BACKOFF_SEC: float = 15.0
-TIMEOUT_SEC: int = 15
+
+def _normalize_price(price: str | None) -> str | None:
+    """Convert prices like '6,--€' to '6,00€'."""
+    if price is None:
+        return None
+    return _DASH_CENTS.sub(r"\1,00\2", price)
 
 
 def fetch_price(name: str) -> dict[str, str | None]:
