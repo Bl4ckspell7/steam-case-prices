@@ -21,6 +21,8 @@ function onOpen() {
     .addSeparator()
     .addItem("Save snapshot", "saveSnapshotToHistory")
     .addToUi();
+
+  updateFromGitHub();
 }
 
 function updateFromGitHub() {
