@@ -21,8 +21,6 @@ function onOpen() {
     .addSeparator()
     .addItem("Save snapshot", "saveSnapshotToHistory")
     .addToUi();
-
-  updateFromGitHub();
 }
 
 function updateFromGitHub() {
@@ -76,10 +74,19 @@ function saveSnapshotToHistory() {
 }
 
 function installDailyTriggers() {
-  // Clear any existing daily triggers
   ScriptApp.getProjectTriggers()
     .filter((t) => t.getEventType() === ScriptApp.EventType.CLOCK)
     .forEach((t) => ScriptApp.deleteTrigger(t));
+
+  // Fetch on spreadsheet open (installable — has auth)
+  ScriptApp.getProjectTriggers()
+    .filter((t) => t.getEventType() === ScriptApp.EventType.ON_OPEN)
+    .forEach((t) => ScriptApp.deleteTrigger(t));
+
+  ScriptApp.newTrigger("updateFromGitHub")
+    .forSpreadsheet(SpreadsheetApp.getActive())
+    .onOpen()
+    .create();
 
   ScriptApp.newTrigger("updateFromGitHub")
     .timeBased()
