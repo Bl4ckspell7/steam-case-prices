@@ -2,7 +2,7 @@ name: Fetch Steam Prices
 
 on:
     schedule:
-        - cron: "0 4,12,20 * * *" # runs daily at 04:00, 12:00, and 20:00 UTC
+        - cron: "0 4,14 * * *" # runs daily at 04:00 and 14:00 UTC
     workflow_dispatch: # manual trigger
 
 jobs:
