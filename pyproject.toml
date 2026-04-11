@@ -6,3 +6,13 @@ requires-python = ">=3.14"
 dependencies = [
     "requests>=2.33.1",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "-m 'not integration'"
+markers = ["integration: live HTTP requests to Steam API"]

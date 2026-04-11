@@ -1,5 +1,8 @@
 # steam-prices
 
+[![Test](https://github.com/Bl4ckspell7/steam-prices/actions/workflows/test.yml/badge.svg)](https://github.com/Bl4ckspell7/steam-prices/actions/workflows/test.yml)
+[![Last fetch](https://img.shields.io/github/last-commit/Bl4ckspell7/steam-prices/data?label=last%20fetch)](https://github.com/Bl4ckspell7/steam-prices/tree/data)
+
 Fetches CS2 case prices from the Steam Community Market and saves them to `prices.json`.
 
 ## Setup
@@ -30,4 +33,14 @@ Outputs `prices.json` with median/lowest prices and volume for each item.
     }
   ]
 }
+```
+
+## Development
+
+```bash
+# unit tests
+uv run pytest
+
+# unit + integration tests (live Steam API request)
+uv run pytest -m integration
 ```
