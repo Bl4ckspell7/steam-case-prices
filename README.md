@@ -43,4 +43,16 @@ uv run pytest
 
 # unit + integration tests (live Steam API request)
 uv run pytest -m integration
+
+# lint
+uv run ruff check
+
+# lint + autofix
+uv run ruff check --fix
+
+# format check
+uv run ruff format --check
+
+# format
+uv run ruff format
 ```
