@@ -1,7 +1,7 @@
 import json
 import re
 from pathlib import Path
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -27,7 +27,9 @@ def test_fetch_price_real_request():
             assert _PRICE_RE.match(value), f"{field} has unexpected format: {value!r}"
 
     assert result["volume"] is not None
-    assert result["volume"].replace(",", "").isdigit(), f"volume has unexpected format: {result['volume']!r}"
+    assert result["volume"].replace(",", "").isdigit(), (
+        f"volume has unexpected format: {result['volume']!r}"
+    )
 
 
 # --- _normalize_price ---
