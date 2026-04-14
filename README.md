@@ -5,12 +5,6 @@
 
 Fetches CS2 case prices from the Steam Community Market and saves them to `prices.json`.
 
-## Setup
-
-```
-uv sync
-```
-
 ## Usage
 
 ```
