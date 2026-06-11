@@ -1,173 +1,173 @@
 {
-  "updated_at": "2026-06-10T17:22:10.352893+00:00",
+  "updated_at": "2026-06-11T08:48:28.541650+00:00",
   "prices": [
     {
       "name": "Chroma 2 Case",
-      "median_price": "5,00€",
-      "lowest_price": "4,99€",
-      "volume": "2,080"
+      "median_price": "5,22€",
+      "lowest_price": "5,02€",
+      "volume": "2,406"
     },
     {
       "name": "Chroma 3 Case",
-      "median_price": "4,50€",
-      "lowest_price": null,
-      "volume": "3,499"
+      "median_price": "4,49€",
+      "lowest_price": "4,44€",
+      "volume": "2,910"
     },
     {
       "name": "Chroma Case",
-      "median_price": "6,47€",
-      "lowest_price": null,
-      "volume": "582"
+      "median_price": "5,86€",
+      "lowest_price": "6,28€",
+      "volume": "604"
     },
     {
       "name": "Clutch Case",
       "median_price": "0,89€",
       "lowest_price": null,
-      "volume": "7,729"
+      "volume": "7,829"
     },
     {
       "name": "CS:GO Weapon Case 2",
-      "median_price": "29,64€",
-      "lowest_price": "29,64€",
-      "volume": "90"
+      "median_price": "32,28€",
+      "lowest_price": "32,40€",
+      "volume": "85"
     },
     {
       "name": "CS:GO Weapon Case 3",
-      "median_price": "16,87€",
-      "lowest_price": null,
-      "volume": "88"
+      "median_price": "17,73€",
+      "lowest_price": "17,73€",
+      "volume": "100"
     },
     {
       "name": "Danger Zone Case",
-      "median_price": "1,99€",
-      "lowest_price": "1,98€",
-      "volume": "7,177"
+      "median_price": "2,00€",
+      "lowest_price": null,
+      "volume": "7,815"
     },
     {
       "name": "Dreams & Nightmares Case",
-      "median_price": "1,60€",
-      "lowest_price": "1,56€",
-      "volume": "138,589"
+      "median_price": "1,63€",
+      "lowest_price": null,
+      "volume": "147,918"
     },
     {
       "name": "Falchion Case",
-      "median_price": "2,27€",
-      "lowest_price": "2,30€",
-      "volume": "1,593"
+      "median_price": "2,31€",
+      "lowest_price": "2,27€",
+      "volume": "1,644"
     },
     {
       "name": "Fracture Case",
-      "median_price": "0,78€",
-      "lowest_price": "0,78€",
-      "volume": "26,541"
+      "median_price": "0,77€",
+      "lowest_price": "0,76€",
+      "volume": "29,315"
     },
     {
       "name": "Gallery Case",
-      "median_price": "1,22€",
+      "median_price": "1,23€",
       "lowest_price": "1,26€",
-      "volume": "8,111"
+      "volume": "7,633"
     },
     {
       "name": "Gamma Case",
-      "median_price": "4,32€",
-      "lowest_price": null,
-      "volume": "2,902"
+      "median_price": "4,35€",
+      "lowest_price": "4,33€",
+      "volume": "2,901"
     },
     {
       "name": "Glove Case",
-      "median_price": "21,62€",
+      "median_price": "20,85€",
       "lowest_price": null,
-      "volume": "2,019"
+      "volume": "2,407"
     },
     {
       "name": "Horizon Case",
-      "median_price": "2,46€",
+      "median_price": "2,49€",
       "lowest_price": null,
-      "volume": "5,832"
+      "volume": "6,449"
     },
     {
       "name": "Operation Breakout Weapon Case",
-      "median_price": "10,35€",
-      "lowest_price": null,
-      "volume": "2,050"
+      "median_price": "10,36€",
+      "lowest_price": "10,35€",
+      "volume": "2,135"
     },
     {
       "name": "Operation Broken Fang Case",
-      "median_price": "8,89€",
-      "lowest_price": "8,98€",
-      "volume": "894"
+      "median_price": "9,01€",
+      "lowest_price": "8,92€",
+      "volume": "861"
     },
     {
       "name": "Operation Hydra Case",
-      "median_price": "45,21€",
-      "lowest_price": "46,60€",
-      "volume": "56"
+      "median_price": "48,36€",
+      "lowest_price": "48,36€",
+      "volume": "88"
     },
     {
       "name": "Operation Phoenix Weapon Case",
-      "median_price": "5,42€",
-      "lowest_price": "4,88€",
-      "volume": "1,092"
+      "median_price": "5,34€",
+      "lowest_price": null,
+      "volume": "1,343"
     },
     {
       "name": "Operation Vanguard Weapon Case",
-      "median_price": "7,85€",
-      "lowest_price": "7,72€",
-      "volume": "593"
+      "median_price": "7,92€",
+      "lowest_price": "7,55€",
+      "volume": "632"
     },
     {
       "name": "Operation Wildfire Case",
-      "median_price": "4,60€",
-      "lowest_price": "4,60€",
-      "volume": "1,297"
+      "median_price": "4,70€",
+      "lowest_price": "4,20€",
+      "volume": "1,611"
     },
     {
       "name": "Prisma 2 Case",
-      "median_price": "2,04€",
+      "median_price": "2,05€",
       "lowest_price": "2,03€",
-      "volume": "7,087"
+      "volume": "6,687"
     },
     {
       "name": "Prisma Case",
-      "median_price": "2,07€",
-      "lowest_price": null,
-      "volume": "5,665"
+      "median_price": "2,04€",
+      "lowest_price": "2,02€",
+      "volume": "5,538"
     },
     {
       "name": "Revolver Case",
-      "median_price": "3,89€",
-      "lowest_price": "3,72€",
-      "volume": "1,755"
+      "median_price": "3,87€",
+      "lowest_price": "3,86€",
+      "volume": "1,543"
     },
     {
       "name": "Shadow Case",
-      "median_price": "2,36€",
-      "lowest_price": null,
-      "volume": "1,661"
+      "median_price": "2,38€",
+      "lowest_price": "2,42€",
+      "volume": "1,934"
     },
     {
       "name": "Shattered Web Case",
       "median_price": "8,47€",
-      "lowest_price": "8,45€",
-      "volume": "602"
+      "lowest_price": "8,46€",
+      "volume": "544"
     },
     {
       "name": "Snakebite Case",
-      "median_price": "0,76€",
-      "lowest_price": "0,75€",
-      "volume": "11,823"
+      "median_price": "0,74€",
+      "lowest_price": "0,74€",
+      "volume": "11,737"
     },
     {
       "name": "Spectrum 2 Case",
-      "median_price": "4,06€",
-      "lowest_price": null,
-      "volume": "4,516"
+      "median_price": "4,03€",
+      "lowest_price": "3,96€",
+      "volume": "5,336"
     },
     {
       "name": "Spectrum Case",
-      "median_price": "4,99€",
-      "lowest_price": "5,00€",
-      "volume": "2,945"
+      "median_price": "5,05€",
+      "lowest_price": null,
+      "volume": "2,954"
     }
   ]
 }
