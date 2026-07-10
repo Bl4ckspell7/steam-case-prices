@@ -5,11 +5,15 @@ const SHEET_HISTORY = "Cases value history";
 const ROW_TOTALS = 4;
 const ROW_START = 6;
 
-const COL_NAME = 2; // B
-const COL_JSON_URL = 7; // G
-const COL_CURRENT_PRICE = 9; // I
-const COL_BUY_VALUE = 11; // K
-const COL_PROFIT = 12; // L
+const COL_NAME = 2; // B  — case name (layout reference)
+const COL_JSON_URL = 7; // G  — steam priceoverview URL (price matching)
+const COL_CURRENT_PRICE = 9; // I  — current unit price (written by fetch)
+
+// Snapshot source columns (totals row) — updated for sales tracking:
+const COL_HELD_VALUE = 11; // K  — held value  (bought-still-held × current price)
+const COL_INV_CASH = 15; // O  — investment cash  (realized proceeds, invest-tagged)
+const COL_INVESTMENT = 17; // Q  — investment P/L  (unrealized + realized)
+const COL_HOLD_VALUE = 20; // T  — if-never-sold value  (all bought × current price)
 
 const PRICES_URL =
   "https://raw.githubusercontent.com/Bl4ckspell7/steam-prices/data/prices.json";
@@ -66,10 +70,17 @@ function saveSnapshotToHistory() {
   const data = ss.getSheetByName(SHEET_DATA);
   const hist = ss.getSheetByName(SHEET_HISTORY);
 
+  const heldValue = data.getRange(ROW_TOTALS, COL_HELD_VALUE).getValue(); // K4
+  const invCash = data.getRange(ROW_TOTALS, COL_INV_CASH).getValue(); // O4
+  const profit = data.getRange(ROW_TOTALS, COL_INVESTMENT).getValue(); // Q4
+  const holdValue = data.getRange(ROW_TOTALS, COL_HOLD_VALUE).getValue(); // T4
+
   hist.appendRow([
-    data.getRange(ROW_TOTALS, COL_BUY_VALUE).getValue(),
-    data.getRange(ROW_TOTALS, COL_PROFIT).getValue(),
-    new Date(),
+    heldValue + invCash, // A: Value      (held value + cash pulled out)
+    profit, // B: Profit     (unrealized + realized)
+    new Date(), // C: Date
+    invCash, // D: Realized   (cash locked in — the floor)
+    holdValue, // E: If never sold (all bought × current price)
   ]);
 }
 
