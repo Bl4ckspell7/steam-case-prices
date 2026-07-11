@@ -25,11 +25,12 @@ function updateFromGitHub() {
   const lastRow = sheet.getLastRow();
   const numRows = lastRow - ROW_START + 1;
 
-  // Build lookup: encoded name → price
+  // Build lookup: name and market ID → price
   const lookup = {};
   for (const item of data.prices) {
-    lookup[decodeURIComponent(item.name).toLowerCase()] =
-      item.median_price ?? item.lowest_price ?? null;
+    const price = item.median_price ?? item.lowest_price ?? null;
+    lookup[decodeURIComponent(item.name).toLowerCase()] = price;
+    if (item.id) lookup[item.id.toLowerCase()] = price;
   }
 
   // Match by JSON URL column (extract market_hash_name);
@@ -39,7 +40,7 @@ function updateFromGitHub() {
     const url = urls[i][0];
     if (!url) continue;
 
-    const match = url.match(/market_hash_name=(.+)/);
+    const match = url.match(/market_hash_name=([^#]+)/);
     if (!match) continue;
 
     const name = decodeURIComponent(match[1]).toLowerCase();
