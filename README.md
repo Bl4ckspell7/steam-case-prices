@@ -13,6 +13,8 @@ uv run fetch_prices.py
 
 Outputs `prices.json` with median/lowest prices and volume for each item.
 
+Items are configured in `items.json`. To add one, append `{ "name": "...", "id": null, "type": "..." }` — the script resolves the market ID automatically on the next run.
+
 ## Output format
 
 ```json
