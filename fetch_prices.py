@@ -108,6 +108,7 @@ def fetch_price(name: str, item_id: str | None = None) -> dict[str, str | None]:
 
         return {
             "name": name,
+            "id": item_id,
             "median_price": _normalize_price(data.get("median_price")),
             "lowest_price": _normalize_price(data.get("lowest_price")),
             "volume": data.get("volume"),
@@ -117,7 +118,13 @@ def fetch_price(name: str, item_id: str | None = None) -> dict[str, str | None]:
     if result is not None:
         return result
 
-    return {"name": name, "median_price": None, "lowest_price": None, "volume": None}
+    return {
+        "name": name,
+        "id": item_id,
+        "median_price": None,
+        "lowest_price": None,
+        "volume": None,
+    }
 
 
 def main() -> None:

@@ -47,6 +47,7 @@ def test_fetch_price_by_id_real_request():
     result = fetch_price("Chroma Case", "G18DD1F3004")
 
     assert result["name"] == "Chroma Case"
+    assert result["id"] == "G18DD1F3004"
     _assert_valid_prices(result)
 
 
@@ -167,6 +168,7 @@ def test_fetch_price_success(mock_get):
 
     assert result == {
         "name": "Chroma Case",
+        "id": None,
         "median_price": "6,50 €",
         "lowest_price": "6,00 €",
         "volume": "1,234",
@@ -187,6 +189,7 @@ def test_fetch_price_uses_id_in_url(mock_get):
     result = fetch_price("Chroma Case", "G18DD1F3004")
 
     assert result["name"] == "Chroma Case"
+    assert result["id"] == "G18DD1F3004"
     url = mock_get.call_args.args[0]
     assert url.endswith("market_hash_name=G18DD1F3004")
 
@@ -257,10 +260,11 @@ def test_fetch_price_retries_on_exception(mock_get, mock_sleep):
 def test_fetch_price_exhausted_retries_returns_none(mock_get, mock_sleep):
     mock_get.side_effect = Exception("timeout")
 
-    result = fetch_price("Chroma Case")
+    result = fetch_price("Chroma Case", "G18DD1F3004")
 
     assert result == {
         "name": "Chroma Case",
+        "id": "G18DD1F3004",
         "median_price": None,
         "lowest_price": None,
         "volume": None,
@@ -284,6 +288,7 @@ def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeyp
     _write_items(tmp_path / "items.json", _TEST_ITEMS)
     mock_fetch_price.return_value = {
         "name": "Chroma Case",
+        "id": "G18DD1F3004",
         "median_price": "6,50 €",
         "lowest_price": "6,00 €",
         "volume": "100",
@@ -295,6 +300,7 @@ def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeyp
     assert "updated_at" in output
     assert len(output["prices"]) == len(_TEST_ITEMS)
     assert output["prices"][0]["name"] == "Chroma Case"
+    assert output["prices"][0]["id"] == "G18DD1F3004"
 
 
 @patch("fetch_prices.time.sleep")
