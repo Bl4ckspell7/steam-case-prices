@@ -1,5 +1,55 @@
 [
   {
+    "name": "10 Year Birthday Sticker Capsule",
+    "id": "G18EF253004",
+    "type": "capsule"
+  },
+  {
+    "name": "2021 Community Sticker Capsule",
+    "id": "G18AE253004",
+    "type": "capsule"
+  },
+  {
+    "name": "Antwerp 2022 Legends Sticker Capsule",
+    "id": "G18E0253004",
+    "type": "capsule"
+  },
+  {
+    "name": "Anubis Collection Package",
+    "id": "G1892263004",
+    "type": "package"
+  },
+  {
+    "name": "Berlin 2019 Returning Challengers Autograph Capsule",
+    "id": "G18B2243004",
+    "type": "capsule"
+  },
+  {
+    "name": "CS:GO Graffiti Box",
+    "id": "G18BD213004",
+    "type": "box"
+  },
+  {
+    "name": "CS:GO Patch Pack",
+    "id": "G1882243004",
+    "type": "pack"
+  },
+  {
+    "name": "CS:GO Weapon Case",
+    "id": "G18A11F3004",
+    "type": "case"
+  },
+  {
+    "name": "CS:GO Weapon Case 2",
+    "id": "G18A41F3004",
+    "type": "case"
+  },
+  {
+    "name": "CS:GO Weapon Case 3",
+    "id": "G18AA1F3004",
+    "type": "case"
+  },
+  {
     "name": "Chroma 2 Case",
     "id": "G18F91F3004",
     "type": "case"
@@ -20,16 +70,6 @@
     "type": "case"
   },
   {
-    "name": "CS:GO Weapon Case 2",
-    "id": "G18A41F3004",
-    "type": "case"
-  },
-  {
-    "name": "CS:GO Weapon Case 3",
-    "id": "G18AA1F3004",
-    "type": "case"
-  },
-  {
     "name": "Danger Zone Case",
     "id": "G18C4233004",
     "type": "case"
@@ -38,6 +78,11 @@
     "name": "Dreams & Nightmares Case",
     "id": "G18D2253004",
     "type": "case"
+  },
+  {
+    "name": "Espionage Sticker Capsule",
+    "id": "G188F263004",
+    "type": "capsule"
   },
   {
     "name": "Falchion Case",
@@ -60,13 +105,38 @@
     "type": "case"
   },
   {
+    "name": "Gift Package",
+    "id": "G18BA093004",
+    "type": "package"
+  },
+  {
     "name": "Glove Case",
     "id": "G18C0213004",
     "type": "case"
   },
   {
+    "name": "Half-Life: Alyx Patch Pack",
+    "id": "G1887243004",
+    "type": "pack"
+  },
+  {
+    "name": "Halo Capsule",
+    "id": "G18F5233004",
+    "type": "capsule"
+  },
+  {
     "name": "Horizon Case",
     "id": "G1882233004",
+    "type": "case"
+  },
+  {
+    "name": "Huntsman Weapon Case",
+    "id": "G18B11F3004",
+    "type": "case"
+  },
+  {
+    "name": "Operation Bravo Case",
+    "id": "G18A31F3004",
     "type": "case"
   },
   {
@@ -100,6 +170,81 @@
     "type": "case"
   },
   {
+    "name": "Paris 2023 Ancient Souvenir Package",
+    "id": "G18A1263004",
+    "type": "package"
+  },
+  {
+    "name": "Paris 2023 Anubis Souvenir Package",
+    "id": "G189F263004",
+    "type": "package"
+  },
+  {
+    "name": "Paris 2023 Challengers Autograph Capsule",
+    "id": "G18A5263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Challengers Sticker Capsule",
+    "id": "G189B263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Champions Autograph Capsule",
+    "id": "G18A7263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Contenders Autograph Capsule",
+    "id": "G18A6263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Contenders Sticker Capsule",
+    "id": "G189C263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Inferno Souvenir Package",
+    "id": "G189D263004",
+    "type": "package"
+  },
+  {
+    "name": "Paris 2023 Legends Autograph Capsule",
+    "id": "G18A4263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Legends Sticker Capsule",
+    "id": "G189A263004",
+    "type": "capsule"
+  },
+  {
+    "name": "Paris 2023 Mirage Souvenir Package",
+    "id": "G189E263004",
+    "type": "package"
+  },
+  {
+    "name": "Paris 2023 Nuke Souvenir Package",
+    "id": "G18A2263004",
+    "type": "package"
+  },
+  {
+    "name": "Paris 2023 Overpass Souvenir Package",
+    "id": "G18A0263004",
+    "type": "package"
+  },
+  {
+    "name": "Paris 2023 Vertigo Souvenir Package",
+    "id": "G18A3263004",
+    "type": "package"
+  },
+  {
+    "name": "Poorly Drawn Capsule",
+    "id": "G188A253004",
+    "type": "capsule"
+  },
+  {
     "name": "Prisma 2 Case",
     "id": "G18D7243004",
     "type": "case"
@@ -125,6 +270,11 @@
     "type": "case"
   },
   {
+    "name": "Skill Groups Capsule",
+    "id": "G18C3233004",
+    "type": "capsule"
+  },
+  {
     "name": "Snakebite Case",
     "id": "G188B253004",
     "type": "case"
@@ -137,6 +287,46 @@
   {
     "name": "Spectrum Case",
     "id": "G18FF213004",
+    "type": "case"
+  },
+  {
+    "name": "Sugarface Capsule",
+    "id": "G18BA213004",
+    "type": "capsule"
+  },
+  {
+    "name": "The Boardroom Sticker Capsule",
+    "id": "G18B0253004",
+    "type": "capsule"
+  },
+  {
+    "name": "Warhammer 40,000 Sticker Capsule",
+    "id": "G1888243004",
+    "type": "capsule"
+  },
+  {
+    "name": "Winter Offensive Weapon Case",
+    "id": "G18A91F3004",
+    "type": "case"
+  },
+  {
+    "name": "X-Ray P250 Package",
+    "id": "G18BC243004",
+    "type": "package"
+  },
+  {
+    "name": "eSports 2013 Case",
+    "id": "G18A21F3004",
+    "type": "case"
+  },
+  {
+    "name": "eSports 2013 Winter Case",
+    "id": "G18A51F3004",
+    "type": "case"
+  },
+  {
+    "name": "eSports 2014 Summer Case",
+    "id": "G18B31F3004",
     "type": "case"
   }
 ]
