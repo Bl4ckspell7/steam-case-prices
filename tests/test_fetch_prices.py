@@ -5,7 +5,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from fetch_prices import _normalize_price, fetch_price, main
+from fetch_prices import (
+    _normalize_price,
+    fetch_price,
+    main,
+    resolve_id,
+    resolve_missing_ids,
+)
 
 
 # --- integration ---
@@ -14,11 +20,7 @@ from fetch_prices import _normalize_price, fetch_price, main
 _PRICE_RE = re.compile(r"^\d+,\d{2}\s*€$")
 
 
-@pytest.mark.integration
-def test_fetch_price_real_request():
-    result = fetch_price("Chroma Case")
-
-    assert result["name"] == "Chroma Case"
+def _assert_valid_prices(result: dict) -> None:
     assert result["median_price"] is not None or result["lowest_price"] is not None
 
     for field in ("median_price", "lowest_price"):
@@ -30,6 +32,27 @@ def test_fetch_price_real_request():
     assert result["volume"].replace(",", "").isdigit(), (
         f"volume has unexpected format: {result['volume']!r}"
     )
+
+
+@pytest.mark.integration
+def test_fetch_price_real_request():
+    result = fetch_price("Chroma Case")
+
+    assert result["name"] == "Chroma Case"
+    _assert_valid_prices(result)
+
+
+@pytest.mark.integration
+def test_fetch_price_by_id_real_request():
+    result = fetch_price("Chroma Case", "G18DD1F3004")
+
+    assert result["name"] == "Chroma Case"
+    _assert_valid_prices(result)
+
+
+@pytest.mark.integration
+def test_resolve_id_real_request():
+    assert resolve_id("Chroma Case") == "G18DD1F3004"
 
 
 # --- _normalize_price ---
@@ -45,6 +68,77 @@ def test_normalize_price_normal():
 
 def test_normalize_price_none():
     assert _normalize_price(None) is None
+
+
+# --- resolve_id ---
+
+
+def _mock_redirect(location: str | None) -> MagicMock:
+    resp = MagicMock()
+    resp.status_code = 302 if location else 200
+    resp.headers = {"Location": location} if location else {}
+    return resp
+
+
+@patch("fetch_prices.requests.get")
+def test_resolve_id_parses_redirect(mock_get):
+    mock_get.return_value = _mock_redirect(
+        "https://steamcommunity.com/market/listings/730/G18F91F3004"
+    )
+
+    assert resolve_id("Chroma 2 Case") == "G18F91F3004"
+    assert mock_get.call_args.kwargs["allow_redirects"] is False
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.requests.get")
+def test_resolve_id_no_redirect_returns_none(mock_get, mock_sleep):
+    mock_get.return_value = _mock_redirect(None)
+
+    assert resolve_id("Unknown Item") is None
+    assert mock_get.call_count == 3
+
+
+# --- resolve_missing_ids ---
+
+
+def _write_items(path: Path, items: list[dict]) -> None:
+    path.write_text(json.dumps(items), encoding="utf-8")
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.resolve_id")
+def test_resolve_missing_ids_fills_and_saves(
+    mock_resolve_id, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    mock_resolve_id.return_value = "G18F91F3004"
+    items = [
+        {"name": "Chroma 2 Case", "id": None, "type": "case"},
+        {"name": "Chroma Case", "id": "G18DD1F3004", "type": "case"},
+    ]
+
+    resolve_missing_ids(items)
+
+    mock_resolve_id.assert_called_once_with("Chroma 2 Case")
+    assert items[0]["id"] == "G18F91F3004"
+    saved = json.loads(Path("items.json").read_text(encoding="utf-8"))
+    assert saved == items
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.resolve_id")
+def test_resolve_missing_ids_no_save_when_unresolved(
+    mock_resolve_id, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    mock_resolve_id.return_value = None
+    items = [{"name": "Unknown Item", "id": None, "type": "case"}]
+
+    resolve_missing_ids(items)
+
+    assert items[0]["id"] is None
+    assert not Path("items.json").exists()
 
 
 # --- fetch_price ---
@@ -77,6 +171,24 @@ def test_fetch_price_success(mock_get):
         "lowest_price": "6,00 €",
         "volume": "1,234",
     }
+
+
+@patch("fetch_prices.requests.get")
+def test_fetch_price_uses_id_in_url(mock_get):
+    mock_get.return_value = _mock_response(
+        {
+            "success": True,
+            "median_price": "6,50 €",
+            "lowest_price": "6,00 €",
+            "volume": "1,234",
+        }
+    )
+
+    result = fetch_price("Chroma Case", "G18DD1F3004")
+
+    assert result["name"] == "Chroma Case"
+    url = mock_get.call_args.args[0]
+    assert url.endswith("market_hash_name=G18DD1F3004")
 
 
 @patch("fetch_prices.requests.get")
@@ -159,10 +271,17 @@ def test_fetch_price_exhausted_retries_returns_none(mock_get, mock_sleep):
 # --- main ---
 
 
+_TEST_ITEMS = [
+    {"name": "Chroma Case", "id": "G18DD1F3004", "type": "case"},
+    {"name": "Chroma 2 Case", "id": "G18F91F3004", "type": "case"},
+]
+
+
 @patch("fetch_prices.time.sleep")
 @patch("fetch_prices.fetch_price")
 def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)
     mock_fetch_price.return_value = {
         "name": "Chroma Case",
         "median_price": "6,50 €",
@@ -174,14 +293,15 @@ def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeyp
 
     output = json.loads(Path("prices.json").read_text())
     assert "updated_at" in output
-    assert len(output["prices"]) > 0
+    assert len(output["prices"]) == len(_TEST_ITEMS)
     assert output["prices"][0]["name"] == "Chroma Case"
 
 
 @patch("fetch_prices.time.sleep")
 @patch("fetch_prices.fetch_price")
-def test_main_sleeps_between_items(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
+def test_main_fetches_by_id(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)
     mock_fetch_price.return_value = {
         "name": "x",
         "median_price": None,
@@ -191,7 +311,25 @@ def test_main_sleeps_between_items(mock_fetch_price, mock_sleep, tmp_path, monke
 
     main()
 
-    from fetch_prices import DELAY_SEC, ITEMS
+    assert mock_fetch_price.call_args_list[0].args == ("Chroma Case", "G18DD1F3004")
+    assert mock_fetch_price.call_args_list[1].args == ("Chroma 2 Case", "G18F91F3004")
 
-    assert mock_sleep.call_count == len(ITEMS) - 1
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
+def test_main_sleeps_between_items(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)
+    mock_fetch_price.return_value = {
+        "name": "x",
+        "median_price": None,
+        "lowest_price": None,
+        "volume": None,
+    }
+
+    main()
+
+    from fetch_prices import DELAY_SEC
+
+    assert mock_sleep.call_count == len(_TEST_ITEMS) - 1
     mock_sleep.assert_called_with(DELAY_SEC)
