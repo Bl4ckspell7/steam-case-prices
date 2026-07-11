@@ -52,3 +52,12 @@ uv run ruff format --check
 # format
 uv run ruff format
 ```
+
+## Upgrading dependencies
+
+Remove and re-add to bump the version floors in `pyproject.toml`:
+
+```bash
+uv remove requests && uv add requests
+uv remove --dev pytest ruff && uv add --dev pytest ruff
+```
