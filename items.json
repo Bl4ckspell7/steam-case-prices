@@ -10,6 +10,21 @@
     "type": "capsule"
   },
   {
+    "name": "AUG | Eye of Zapems (Minimal Wear)",
+    "id": "G18082086013004",
+    "type": "skin"
+  },
+  {
+    "name": "AUG | Navy Murano (Factory New)",
+    "id": "G180820E4053004",
+    "type": "skin"
+  },
+  {
+    "name": "AUG | Surveillance (Factory New)",
+    "id": "G180820E3073004",
+    "type": "skin"
+  },
+  {
     "name": "Antwerp 2022 Legends Sticker Capsule",
     "id": "G18E0253004",
     "type": "capsule"
@@ -65,6 +80,16 @@
     "type": "case"
   },
   {
+    "name": "CZ75-Auto | Indigo (Minimal Wear)",
+    "id": "G183F20CD023004",
+    "type": "skin"
+  },
+  {
+    "name": "CZ75-Auto | Syndicate (Field-Tested)",
+    "id": "G183F20A8083004",
+    "type": "skin"
+  },
+  {
     "name": "Chroma 2 Case",
     "id": "G18F91F3004",
     "type": "case"
@@ -110,9 +135,29 @@
     "type": "case"
   },
   {
+    "name": "Dual Berettas | Briar (Factory New)",
+    "id": "G180220CA023004",
+    "type": "skin"
+  },
+  {
+    "name": "Dual Berettas | Briar (Minimal Wear)",
+    "id": "G180220CA023004",
+    "type": "skin"
+  },
+  {
+    "name": "Dual Berettas | Oil Change (Minimal Wear)",
+    "id": "G180220BE083004",
+    "type": "skin"
+  },
+  {
     "name": "Espionage Sticker Capsule",
     "id": "G188F263004",
     "type": "capsule"
+  },
+  {
+    "name": "FAMAS | Night Borre (Factory New)",
+    "id": "G180A20DF063004",
+    "type": "skin"
   },
   {
     "name": "Falchion Case",
@@ -165,6 +210,36 @@
     "type": "case"
   },
   {
+    "name": "MP5-SD | Acid Wash (Battle-Scarred)",
+    "id": "G181720F8063004",
+    "type": "skin"
+  },
+  {
+    "name": "MP5-SD | Acid Wash (Factory New)",
+    "id": "G181720F8063004",
+    "type": "skin"
+  },
+  {
+    "name": "MP5-SD | Bamboo Garden (Factory New)",
+    "id": "G181720E8063004",
+    "type": "skin"
+  },
+  {
+    "name": "MP9 | Airlock (Factory New)",
+    "id": "G182220E1043004",
+    "type": "skin"
+  },
+  {
+    "name": "MP9 | Army Sheen (Factory New)",
+    "id": "G182220AA023004",
+    "type": "skin"
+  },
+  {
+    "name": "Negev | Infrastructure (Factory New)",
+    "id": "G181C20B8083004",
+    "type": "skin"
+  },
+  {
     "name": "Operation Bravo Case",
     "id": "G18A31F3004",
     "type": "case"
@@ -213,6 +288,16 @@
     "name": "Operation Wildfire Case",
     "id": "G18DB203004",
     "type": "case"
+  },
+  {
+    "name": "P90 | Storm (Minimal Wear)",
+    "id": "G181320643004",
+    "type": "skin"
+  },
+  {
+    "name": "PP-Bizon | Seabird (Factory New)",
+    "id": "G181A20E9063004",
+    "type": "skin"
   },
   {
     "name": "Paris 2023 Ancient Souvenir Package",
@@ -320,6 +405,26 @@
     "type": "pass"
   },
   {
+    "name": "SCAR-20 | Stone Mosaico (Factory New)",
+    "id": "G182620E1063004",
+    "type": "skin"
+  },
+  {
+    "name": "SG 553 | Barricade (Factory New)",
+    "id": "G182720DD063004",
+    "type": "skin"
+  },
+  {
+    "name": "SG 553 | Candy Apple (Field-Tested)",
+    "id": "G182720E0063004",
+    "type": "skin"
+  },
+  {
+    "name": "Sawed-Off | Jungle Thicket (Factory New)",
+    "id": "G181D20E6063004",
+    "type": "skin"
+  },
+  {
     "name": "Shadow Case",
     "id": "G18AA203004",
     "type": "case"
@@ -358,6 +463,26 @@
     "name": "Spectrum Case",
     "id": "G18FF213004",
     "type": "case"
+  },
+  {
+    "name": "StatTrak™ Desert Eagle | Code Red (Minimal Wear)",
+    "id": "G180120C7053004",
+    "type": "skin"
+  },
+  {
+    "name": "StatTrak™ M4A1-S | Mecha Industries (Field-Tested)",
+    "id": "G183C20CB043004",
+    "type": "skin"
+  },
+  {
+    "name": "StatTrak™ MP9 | Airlock (Factory New)",
+    "id": "G182220E1043004",
+    "type": "skin"
+  },
+  {
+    "name": "StatTrak™ USP-S | Black Lotus (Minimal Wear)",
+    "id": "G183D20CE083004",
+    "type": "skin"
   },
   {
     "name": "Sticker | Astralis | Atlanta 2017",
@@ -488,6 +613,16 @@
     "name": "X-Ray P250 Package",
     "id": "G18BC243004",
     "type": "package"
+  },
+  {
+    "name": "XM1014 | Charter (Factory New)",
+    "id": "G181920E2073004",
+    "type": "skin"
+  },
+  {
+    "name": "XM1014 | Monster Melt (Minimal Wear)",
+    "id": "G18192092013004",
+    "type": "skin"
   },
   {
     "name": "eSports 2013 Case",

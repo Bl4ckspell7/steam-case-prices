@@ -19,6 +19,9 @@ TIMEOUT_SEC: int = 15
 _DASH_CENTS = re.compile(r"(\d),--(\s*€)")
 _ITEM_ID = re.compile(r"G[0-9A-F]+$")
 
+# Item types whose market variants share one family listing ID.
+VARIANT_TYPES: frozenset[str] = frozenset({"skin"})
+
 
 class Item(TypedDict):
     name: str
@@ -135,7 +138,11 @@ def main() -> None:
 
     for i, item in enumerate(items):
         print(f"[{i + 1:02d}/{len(items)}] {item['name']}")
-        results.append(fetch_price(item["name"], item.get("id")))
+        # Steam maps all variants of a skin (wear, StatTrak) to one shared
+        # family listing ID whose priceoverview data is aggregated — skins must
+        # be fetched by name to get the variant's own price.
+        item_id: str | None = None if item["type"] in VARIANT_TYPES else item.get("id")
+        results.append(fetch_price(item["name"], item_id))
         if i < len(items) - 1:
             time.sleep(DELAY_SEC)
 

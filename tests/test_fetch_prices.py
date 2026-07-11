@@ -323,6 +323,46 @@ def test_main_fetches_by_id(mock_fetch_price, mock_sleep, tmp_path, monkeypatch)
 
 @patch("fetch_prices.time.sleep")
 @patch("fetch_prices.fetch_price")
+def test_main_fetches_skins_by_name(
+    mock_fetch_price, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    _write_items(
+        tmp_path / "items.json",
+        [
+            {
+                "name": "MP5-SD | Acid Wash (Battle-Scarred)",
+                "id": "G1817",
+                "type": "skin",
+            },
+            {
+                "name": "Negev | Infrastructure (Factory New)",
+                "id": "G181C",
+                "type": "skin",
+            },
+            {"name": "Chroma Case", "id": "G18DD1F3004", "type": "case"},
+        ],
+    )
+    mock_fetch_price.return_value = {
+        "name": "x",
+        "id": None,
+        "median_price": None,
+        "lowest_price": None,
+        "volume": None,
+    }
+
+    main()
+
+    calls = [c.args for c in mock_fetch_price.call_args_list]
+    assert calls == [
+        ("MP5-SD | Acid Wash (Battle-Scarred)", None),
+        ("Negev | Infrastructure (Factory New)", None),
+        ("Chroma Case", "G18DD1F3004"),
+    ]
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
 def test_main_sleeps_between_items(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     _write_items(tmp_path / "items.json", _TEST_ITEMS)
