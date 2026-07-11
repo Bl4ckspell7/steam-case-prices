@@ -15,9 +15,24 @@
     "type": "capsule"
   },
   {
+    "name": "Antwerp 2022 Viewer Pass",
+    "id": "G18D9253004",
+    "type": "pass"
+  },
+  {
     "name": "Anubis Collection Package",
     "id": "G1892263004",
     "type": "package"
+  },
+  {
+    "name": "Austin 2025 Viewer Pass",
+    "id": "G18F6273004",
+    "type": "pass"
+  },
+  {
+    "name": "Austin 2025 Viewer Pass + 3 Souvenir Tokens",
+    "id": "G18FB273004",
+    "type": "pass"
   },
   {
     "name": "Berlin 2019 Returning Challengers Autograph Capsule",
@@ -68,6 +83,21 @@
     "name": "Clutch Case",
     "id": "G18F7223004",
     "type": "case"
+  },
+  {
+    "name": "Cologne 2026 Viewer Pass",
+    "id": "G18BE293004",
+    "type": "pass"
+  },
+  {
+    "name": "Copenhagen 2024 Viewer Pass",
+    "id": "G18B4263004",
+    "type": "pass"
+  },
+  {
+    "name": "Copenhagen 2024 Viewer Pass + 3 Souvenir Tokens",
+    "id": "G18B9263004",
+    "type": "pass"
   },
   {
     "name": "Danger Zone Case",
@@ -150,6 +180,11 @@
     "type": "case"
   },
   {
+    "name": "Operation Broken Fang Premium Pass",
+    "id": "G18DB243004",
+    "type": "pass"
+  },
+  {
     "name": "Operation Hydra Case",
     "id": "G1880223004",
     "type": "case"
@@ -158,6 +193,16 @@
     "name": "Operation Phoenix Weapon Case",
     "id": "G18AB1F3004",
     "type": "case"
+  },
+  {
+    "name": "Operation Riptide Premium Pass",
+    "id": "G1896253004",
+    "type": "pass"
+  },
+  {
+    "name": "Operation Shattered Web Premium Pass",
+    "id": "G18C5233004",
+    "type": "pass"
   },
   {
     "name": "Operation Vanguard Weapon Case",
@@ -240,6 +285,11 @@
     "type": "package"
   },
   {
+    "name": "Paris 2023 Viewer Pass",
+    "id": "G1893263004",
+    "type": "pass"
+  },
+  {
     "name": "Poorly Drawn Capsule",
     "id": "G188A253004",
     "type": "capsule"
@@ -260,9 +310,29 @@
     "type": "case"
   },
   {
+    "name": "Rio 2022 Viewer Pass",
+    "id": "G18F2253004",
+    "type": "pass"
+  },
+  {
+    "name": "Rio 2022 Viewer Pass + 3 Souvenir Tokens",
+    "id": "G18F7253004",
+    "type": "pass"
+  },
+  {
     "name": "Shadow Case",
     "id": "G18AA203004",
     "type": "case"
+  },
+  {
+    "name": "Shanghai 2024 Viewer Pass",
+    "id": "G18DD263004",
+    "type": "pass"
+  },
+  {
+    "name": "Shanghai 2024 Viewer Pass + 3 Souvenir Tokens",
+    "id": "G18E2263004",
+    "type": "pass"
   },
   {
     "name": "Shattered Web Case",
@@ -288,6 +358,111 @@
     "name": "Spectrum Case",
     "id": "G18FF213004",
     "type": "case"
+  },
+  {
+    "name": "Sticker | Astralis | Atlanta 2017",
+    "id": "G18B90930046205080010CA0D",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Astralis | Boston 2018",
+    "id": "G18B909300462050800108C13",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Astralis | Cologne 2016",
+    "id": "G18B90930046205080010D50A",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Astralis | Krakow 2017",
+    "id": "G18B909300462050800108F10",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Astralis | MLG Columbus 2016",
+    "id": "G18B909300462050800109F08",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Battle Scarred (Holo)",
+    "id": "G18B90930046205080010D324",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | FURIA (Holo) | 2020 RMR",
+    "id": "G18B90930046205080010A625",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | FURIA (Holo) | Antwerp 2022",
+    "id": "G18B90930046205080010A929",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | FURIA (Holo) | Berlin 2019",
+    "id": "G18B90930046205080010FC1F",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | FURIA (Holo) | Paris 2023",
+    "id": "G18B90930046205080010DA33",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | FURIA (Holo) | Rio 2022",
+    "id": "G18B90930046205080010932F",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | FURIA (Holo) | Stockholm 2021",
+    "id": "G18B90930046205080010DF26",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Gold Web (Foil)",
+    "id": "G18B90930046205080010A023",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Magisk | Krakow 2017",
+    "id": "G18B90930046205080010C711",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | North (Holo) | 2020 RMR",
+    "id": "G18B909300462050800108625",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Spirit (Holo) | 2020 RMR",
+    "id": "G18B909300462050800108A25",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | Stone Scales (Foil)",
+    "id": "G18B90930046205080010D824",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | TYLOO | 2020 RMR",
+    "id": "G18B90930046205080010B925",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | chrisJ | Boston 2018",
+    "id": "G18B90930046205080010B515",
+    "type": "sticker"
+  },
+  {
+    "name": "Sticker | hutji | Boston 2018",
+    "id": "G18B90930046205080010E515",
+    "type": "sticker"
+  },
+  {
+    "name": "Stockholm 2021 Viewer Pass",
+    "id": "G18BC253004",
+    "type": "pass"
   },
   {
     "name": "Sugarface Capsule",
