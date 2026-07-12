@@ -45,9 +45,19 @@ function updateFromGitHub() {
 
     const name = decodeURIComponent(match[1]).toLowerCase();
     const cell = sheet.getRange(ROW_START + i, COL_CURRENT_PRICE);
-    const price = lookup[name];
 
-    cell.setValue(price ?? "Not Found");
+    if (!(name in lookup)) {
+      // Item missing from prices.json entirely → URL/name mismatch, surface it
+      cell.setValue("Not Found");
+      continue;
+    }
+
+    const price = lookup[name];
+    // null price = item matched but momentarily has no listings/sales on
+    // Steam — keep the cell's last known price instead of wiping it
+    if (price !== null) {
+      cell.setValue(price);
+    }
   }
 
   SpreadsheetApp.getActiveSpreadsheet().toast(
