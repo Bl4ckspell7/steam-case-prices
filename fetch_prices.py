@@ -11,10 +11,12 @@ import requests
 PRICE_URL: str = "https://steamcommunity.com/market/priceoverview/?currency=3&appid=730&market_hash_name="
 LISTING_URL: str = "https://steamcommunity.com/market/listings/730/"
 ITEMS_FILE: str = "items.json"
-DELAY_SEC: float = 4.0
+DELAY_SEC: float = 6.0
 MAX_RETRIES: int = 3
-RETRY_BACKOFF_SEC: float = 15.0
+RETRY_BACKOFF_SEC: float = 60.0
 TIMEOUT_SEC: int = 15
+
+SESSION: requests.Session = requests.Session()
 
 _DASH_CENTS = re.compile(r"(\d),--(\s*€)")
 _ITEM_ID = re.compile(r"G[0-9A-F]+$")
@@ -70,7 +72,7 @@ def resolve_id(name: str) -> str | None:
     url: str = LISTING_URL + urlquote(name)
 
     def attempt() -> str | None:
-        resp: requests.Response = requests.get(
+        resp: requests.Response = SESSION.get(
             url, timeout=TIMEOUT_SEC, allow_redirects=False
         )
         match = _ITEM_ID.search(resp.headers.get("Location", ""))
@@ -102,7 +104,7 @@ def fetch_price(name: str, item_id: str | None = None) -> dict[str, str | None]:
     url: str = PRICE_URL + urlquote(item_id or name)
 
     def attempt() -> dict[str, str | None] | None:
-        resp: requests.Response = requests.get(url, timeout=TIMEOUT_SEC)
+        resp: requests.Response = SESSION.get(url, timeout=TIMEOUT_SEC)
         resp.raise_for_status()
         data: dict = resp.json()
 

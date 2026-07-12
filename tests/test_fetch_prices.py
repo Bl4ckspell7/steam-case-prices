@@ -81,7 +81,7 @@ def _mock_redirect(location: str | None) -> MagicMock:
     return resp
 
 
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_resolve_id_parses_redirect(mock_get):
     mock_get.return_value = _mock_redirect(
         "https://steamcommunity.com/market/listings/730/G18F91F3004"
@@ -92,7 +92,7 @@ def test_resolve_id_parses_redirect(mock_get):
 
 
 @patch("fetch_prices.time.sleep")
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_resolve_id_no_redirect_returns_none(mock_get, mock_sleep):
     mock_get.return_value = _mock_redirect(None)
 
@@ -153,7 +153,7 @@ def _mock_response(data: dict, status: int = 200) -> MagicMock:
     return resp
 
 
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_fetch_price_success(mock_get):
     mock_get.return_value = _mock_response(
         {
@@ -175,7 +175,7 @@ def test_fetch_price_success(mock_get):
     }
 
 
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_fetch_price_uses_id_in_url(mock_get):
     mock_get.return_value = _mock_response(
         {
@@ -194,7 +194,7 @@ def test_fetch_price_uses_id_in_url(mock_get):
     assert url.endswith("market_hash_name=G18DD1F3004")
 
 
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_fetch_price_normalizes_dash_cents(mock_get):
     mock_get.return_value = _mock_response(
         {
@@ -212,7 +212,7 @@ def test_fetch_price_normalizes_dash_cents(mock_get):
 
 
 @patch("fetch_prices.time.sleep")
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_fetch_price_retries_on_success_false(mock_get, mock_sleep):
     mock_get.side_effect = [
         _mock_response({"success": False}),
@@ -234,7 +234,7 @@ def test_fetch_price_retries_on_success_false(mock_get, mock_sleep):
 
 
 @patch("fetch_prices.time.sleep")
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_fetch_price_retries_on_exception(mock_get, mock_sleep):
     mock_get.side_effect = [
         Exception("timeout"),
@@ -256,7 +256,7 @@ def test_fetch_price_retries_on_exception(mock_get, mock_sleep):
 
 
 @patch("fetch_prices.time.sleep")
-@patch("fetch_prices.requests.get")
+@patch("fetch_prices.SESSION.get")
 def test_fetch_price_exhausted_retries_returns_none(mock_get, mock_sleep):
     mock_get.side_effect = Exception("timeout")
 
