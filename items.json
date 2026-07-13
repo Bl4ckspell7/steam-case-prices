@@ -55,6 +55,11 @@
     "type": "capsule"
   },
   {
+    "name": "CS20 Case",
+    "id": "G18BD243004",
+    "type": "case"
+  },
+  {
     "name": "CS:GO Graffiti Box",
     "id": "G18BD213004",
     "type": "box"
@@ -180,6 +185,11 @@
     "type": "case"
   },
   {
+    "name": "Gamma 2 Case",
+    "id": "G18B9213004",
+    "type": "case"
+  },
+  {
     "name": "Gamma Case",
     "id": "G188C213004",
     "type": "case"
@@ -277,6 +287,11 @@
   {
     "name": "Operation Phoenix Weapon Case",
     "id": "G18AB1F3004",
+    "type": "case"
+  },
+  {
+    "name": "Operation Riptide Case",
+    "id": "G18B6253004",
     "type": "case"
   },
   {
