@@ -165,6 +165,11 @@
     "type": "case"
   },
   {
+    "name": "Fever Case",
+    "id": "G18DF363004",
+    "type": "case"
+  },
+  {
     "name": "Fracture Case",
     "id": "G18DA243004",
     "type": "case"
@@ -207,6 +212,11 @@
   {
     "name": "Huntsman Weapon Case",
     "id": "G18B11F3004",
+    "type": "case"
+  },
+  {
+    "name": "Kilowatt Case",
+    "id": "G18A8263004",
     "type": "case"
   },
   {
@@ -387,6 +397,16 @@
   {
     "name": "Prisma Case",
     "id": "G18F6233004",
+    "type": "case"
+  },
+  {
+    "name": "Recoil Case",
+    "id": "G18EE253004",
+    "type": "case"
+  },
+  {
+    "name": "Revolution Case",
+    "id": "G1890263004",
     "type": "case"
   },
   {
