@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import time
 from collections.abc import Callable
@@ -11,6 +12,7 @@ import requests
 PRICE_URL: str = "https://steamcommunity.com/market/priceoverview/?currency=3&appid=730&market_hash_name="
 LISTING_URL: str = "https://steamcommunity.com/market/listings/730/"
 ITEMS_FILE: str = "items.json"
+PRICES_FILE: str = "prices.json"
 DELAY_SEC: float = 6.0
 MAX_RETRIES: int = 3
 RETRY_BACKOFF_SEC: float = 60.0
@@ -29,6 +31,37 @@ class Item(TypedDict):
     name: str
     id: str | None
     type: str
+
+
+class PriceData(TypedDict):
+    name: str
+    id: str | None
+    median_price: str | None
+    lowest_price: str | None
+    volume: str | None
+
+
+class Price(PriceData):
+    updated_at: str | None
+
+
+def _read_slice_env() -> tuple[int, int]:
+    """Read (SLICE_COUNT, SLICE_INDEX) from env; default to a single full slice."""
+    count: int = int(os.environ.get("SLICE_COUNT", "1"))
+    index: int = int(os.environ.get("SLICE_INDEX", "0"))
+    if count < 1 or not (0 <= index < count):
+        raise ValueError(f"invalid slice: SLICE_COUNT={count} SLICE_INDEX={index}")
+    return count, index
+
+
+def load_prices() -> dict[str, Price]:
+    """Load the existing snapshot into a name→entry map (empty if absent)."""
+    try:
+        with open(PRICES_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError, json.JSONDecodeError:
+        return {}
+    return {entry["name"]: entry for entry in data.get("prices", [])}
 
 
 def _normalize_price(price: str | None) -> str | None:
@@ -100,10 +133,10 @@ def resolve_missing_ids(items: list[Item]) -> None:
         save_items(items)
 
 
-def fetch_price(name: str, item_id: str | None = None) -> dict[str, str | None]:
+def fetch_price(name: str, item_id: str | None = None) -> PriceData:
     url: str = PRICE_URL + urlquote(item_id or name)
 
-    def attempt() -> dict[str, str | None] | None:
+    def attempt() -> PriceData | None:
         resp: requests.Response = SESSION.get(url, timeout=TIMEOUT_SEC)
         resp.raise_for_status()
         data: dict = resp.json()
@@ -119,7 +152,7 @@ def fetch_price(name: str, item_id: str | None = None) -> dict[str, str | None]:
             "volume": data.get("volume"),
         }
 
-    result: dict[str, str | None] | None = _with_retries(attempt, "success=false")
+    result: PriceData | None = _with_retries(attempt, "success=false")
     if result is not None:
         return result
 
@@ -136,28 +169,60 @@ def main() -> None:
     items: list[Item] = load_items()
     resolve_missing_ids(items)
 
-    results: list[dict[str, str | None]] = []
+    slice_count, slice_index = _read_slice_env()
+    existing: dict[str, Price] = load_prices()
+    now: str = datetime.now(timezone.utc).isoformat()
+
+    # Fetch only this run's slice (stride: items i, i+count, i+2*count, …) and
+    # carry over everything else from the previous snapshot, so a short run stays
+    # under Steam's per-IP request budget while prices.json keeps every item.
+    results: list[Price] = []
+    fetched: int = 0
 
     for i, item in enumerate(items):
-        print(f"[{i + 1:02d}/{len(items)}] {item['name']}")
+        name: str = item["name"]
+        if i % slice_count != slice_index:
+            results.append(existing.get(name) or _placeholder(item))
+            continue
+
+        print(f"[{i + 1:02d}/{len(items)}] {name}")
         # Steam maps all variants of a skin (wear, StatTrak) to one shared
         # family listing ID whose priceoverview data is aggregated — skins must
         # be fetched by name to get the variant's own price.
         item_id: str | None = None if item["type"] in VARIANT_TYPES else item.get("id")
-        results.append(fetch_price(item["name"], item_id))
-        if i < len(items) - 1:
+        price: PriceData = fetch_price(name, item_id)
+        entry: Price = {
+            "name": price["name"],
+            "id": price["id"],
+            "median_price": price["median_price"],
+            "lowest_price": price["lowest_price"],
+            "volume": price["volume"],
+            "updated_at": now,
+        }
+        results.append(entry)
+        fetched += 1
+        if i + slice_count < len(items):
             time.sleep(DELAY_SEC)
 
-    output: dict = {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-        "prices": results,
-    }
+    output: dict = {"updated_at": now, "prices": results}
 
-    with open("prices.json", "w", encoding="utf-8") as f:
+    with open(PRICES_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     ok: int = sum(1 for r in results if r["median_price"] or r["lowest_price"])
-    print(f"\nDone: {ok}/{len(items)} prices fetched")
+    print(f"\nDone: fetched {fetched} this slice, {ok}/{len(items)} priced total")
+
+
+def _placeholder(item: Item) -> Price:
+    """Null-price entry for an item not yet fetched into the snapshot."""
+    return {
+        "name": item["name"],
+        "id": item.get("id"),
+        "median_price": None,
+        "lowest_price": None,
+        "volume": None,
+        "updated_at": None,
+    }
 
 
 if __name__ == "__main__":

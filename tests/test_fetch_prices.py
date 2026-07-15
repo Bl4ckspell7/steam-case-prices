@@ -288,6 +288,16 @@ _TEST_ITEMS = [
 ]
 
 
+def _null_price(name: str = "x") -> dict:
+    return {
+        "name": name,
+        "id": None,
+        "median_price": None,
+        "lowest_price": None,
+        "volume": None,
+    }
+
+
 @patch("fetch_prices.time.sleep")
 @patch("fetch_prices.fetch_price")
 def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
@@ -308,6 +318,8 @@ def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeyp
     assert len(output["prices"]) == len(_TEST_ITEMS)
     assert output["prices"][0]["name"] == "Chroma Case"
     assert output["prices"][0]["id"] == "G18DD1F3004"
+    # every fetched entry carries its own freshness timestamp
+    assert output["prices"][0]["updated_at"] == output["updated_at"]
 
 
 @patch("fetch_prices.time.sleep")
@@ -315,17 +327,111 @@ def test_main_writes_prices_json(mock_fetch_price, mock_sleep, tmp_path, monkeyp
 def test_main_fetches_by_id(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     _write_items(tmp_path / "items.json", _TEST_ITEMS)
-    mock_fetch_price.return_value = {
-        "name": "x",
-        "median_price": None,
-        "lowest_price": None,
-        "volume": None,
-    }
+    mock_fetch_price.return_value = _null_price()
 
     main()
 
     assert mock_fetch_price.call_args_list[0].args == ("Chroma Case", "G18DD1F3004")
     assert mock_fetch_price.call_args_list[1].args == ("Chroma 2 Case", "G18F91F3004")
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
+def test_main_slice_fetches_only_stride(
+    mock_fetch_price, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("SLICE_COUNT", "2")
+    monkeypatch.setenv("SLICE_INDEX", "1")
+    items = [
+        {"name": "A", "id": "G0", "type": "case"},
+        {"name": "B", "id": "G1", "type": "case"},
+        {"name": "C", "id": "G2", "type": "case"},
+        {"name": "D", "id": "G3", "type": "case"},
+    ]
+    _write_items(tmp_path / "items.json", items)
+    mock_fetch_price.side_effect = lambda name, item_id: _null_price(name)
+
+    main()
+
+    # stride index 1 of 2 → items B and D only
+    assert [c.args[0] for c in mock_fetch_price.call_args_list] == ["B", "D"]
+    # but the snapshot still lists all four items
+    output = json.loads(Path("prices.json").read_text())
+    assert [e["name"] for e in output["prices"]] == ["A", "B", "C", "D"]
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
+def test_main_merge_carries_over_unfetched(
+    mock_fetch_price, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("SLICE_COUNT", "2")
+    monkeypatch.setenv("SLICE_INDEX", "0")
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)
+    # prior snapshot holds a real price for the item NOT in this slice
+    Path("prices.json").write_text(
+        json.dumps(
+            {
+                "updated_at": "2020-01-01T00:00:00+00:00",
+                "prices": [
+                    {
+                        "name": "Chroma 2 Case",
+                        "id": "G18F91F3004",
+                        "median_price": "9,99 €",
+                        "lowest_price": "9,90 €",
+                        "volume": "42",
+                        "updated_at": "2020-01-01T00:00:00+00:00",
+                    }
+                ],
+            }
+        )
+    )
+    mock_fetch_price.return_value = {
+        "name": "Chroma Case",
+        "id": "G18DD1F3004",
+        "median_price": "6,50 €",
+        "lowest_price": "6,00 €",
+        "volume": "100",
+    }
+
+    main()
+
+    output = json.loads(Path("prices.json").read_text())
+    prices = {e["name"]: e for e in output["prices"]}
+    # slice 0 → only Chroma Case fetched
+    assert [c.args[0] for c in mock_fetch_price.call_args_list] == ["Chroma Case"]
+    assert prices["Chroma Case"]["median_price"] == "6,50 €"
+    # Chroma 2 Case carried over verbatim, old timestamp intact
+    assert prices["Chroma 2 Case"]["median_price"] == "9,99 €"
+    assert prices["Chroma 2 Case"]["updated_at"] == "2020-01-01T00:00:00+00:00"
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
+def test_main_placeholder_for_never_fetched(
+    mock_fetch_price, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("SLICE_COUNT", "2")
+    monkeypatch.setenv("SLICE_INDEX", "0")
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)  # no existing prices.json
+    mock_fetch_price.return_value = _null_price("Chroma Case")
+
+    main()
+
+    output = json.loads(Path("prices.json").read_text())
+    prices = {e["name"]: e for e in output["prices"]}
+    # unfetched item gets a null placeholder carrying its id, no timestamp
+    assert prices["Chroma 2 Case"] == {
+        "name": "Chroma 2 Case",
+        "id": "G18F91F3004",
+        "median_price": None,
+        "lowest_price": None,
+        "volume": None,
+        "updated_at": None,
+    }
 
 
 @patch("fetch_prices.time.sleep")
@@ -373,16 +479,13 @@ def test_main_fetches_skins_by_name(
 def test_main_sleeps_between_items(mock_fetch_price, mock_sleep, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     _write_items(tmp_path / "items.json", _TEST_ITEMS)
-    mock_fetch_price.return_value = {
-        "name": "x",
-        "median_price": None,
-        "lowest_price": None,
-        "volume": None,
-    }
+    mock_fetch_price.return_value = _null_price()
 
     main()
 
     from fetch_prices import DELAY_SEC
 
+    # full run (no slice env) → one sleep between each fetched item
     assert mock_sleep.call_count == len(_TEST_ITEMS) - 1
+    mock_sleep.assert_called_with(DELAY_SEC)
     mock_sleep.assert_called_with(DELAY_SEC)
