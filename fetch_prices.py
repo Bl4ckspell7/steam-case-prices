@@ -27,6 +27,10 @@ _ITEM_ID = re.compile(r"G[0-9A-F]+$")
 VARIANT_TYPES: frozenset[str] = frozenset({"skin"})
 
 
+class RateLimited(Exception):
+    """Steam answered 429 on every attempt — this IP is blocked, not the item."""
+
+
 class Item(TypedDict):
     name: str
     id: str | None
@@ -135,9 +139,13 @@ def resolve_missing_ids(items: list[Item]) -> None:
 
 def fetch_price(name: str, item_id: str | None = None) -> PriceData:
     url: str = PRICE_URL + urlquote(item_id or name)
+    rate_limited: int = 0
 
     def attempt() -> PriceData | None:
+        nonlocal rate_limited
         resp: requests.Response = SESSION.get(url, timeout=TIMEOUT_SEC)
+        if resp.status_code == 429:
+            rate_limited += 1
         resp.raise_for_status()
         data: dict = resp.json()
 
@@ -155,6 +163,11 @@ def fetch_price(name: str, item_id: str | None = None) -> PriceData:
     result: PriceData | None = _with_retries(attempt, "success=false")
     if result is not None:
         return result
+
+    # Every attempt was refused with 429 → the IP is blocked, so grinding through
+    # the remaining items would only prolong the block. Let the caller abort.
+    if rate_limited >= MAX_RETRIES:
+        raise RateLimited(name)
 
     return {
         "name": name,
@@ -178,11 +191,14 @@ def main() -> None:
     # under Steam's per-IP request budget while prices.json keeps every item.
     results: list[Price] = []
     fetched: int = 0
+    blocked: bool = False
 
     for i, item in enumerate(items):
         name: str = item["name"]
-        if i % slice_count != slice_index:
-            results.append(existing.get(name) or _placeholder(item))
+        carried: Price | None = existing.get(name)
+
+        if blocked or i % slice_count != slice_index:
+            results.append(carried or _placeholder(item))
             continue
 
         print(f"[{i + 1:02d}/{len(items)}] {name}")
@@ -190,17 +206,30 @@ def main() -> None:
         # family listing ID whose priceoverview data is aggregated — skins must
         # be fetched by name to get the variant's own price.
         item_id: str | None = None if item["type"] in VARIANT_TYPES else item.get("id")
-        price: PriceData = fetch_price(name, item_id)
-        entry: Price = {
-            "name": price["name"],
-            "id": price["id"],
-            "median_price": price["median_price"],
-            "lowest_price": price["lowest_price"],
-            "volume": price["volume"],
-            "updated_at": now,
-        }
-        results.append(entry)
-        fetched += 1
+        try:
+            price: PriceData = fetch_price(name, item_id)
+        except RateLimited:
+            print("  rate-limited by Steam — aborting this run")
+            blocked = True
+            results.append(carried or _placeholder(item))
+            continue
+
+        if price["median_price"] is None and price["lowest_price"] is None:
+            # Fetch failed, or the item momentarily has no listings — keep the
+            # last known price rather than wiping it with nulls.
+            results.append(carried or _placeholder(item))
+        else:
+            entry: Price = {
+                "name": price["name"],
+                "id": price["id"],
+                "median_price": price["median_price"],
+                "lowest_price": price["lowest_price"],
+                "volume": price["volume"],
+                "updated_at": now,
+            }
+            results.append(entry)
+            fetched += 1
+
         if i + slice_count < len(items):
             time.sleep(DELAY_SEC)
 
@@ -211,6 +240,9 @@ def main() -> None:
 
     ok: int = sum(1 for r in results if r["median_price"] or r["lowest_price"])
     print(f"\nDone: fetched {fetched} this slice, {ok}/{len(items)} priced total")
+
+    if blocked:
+        raise SystemExit("Steam rate-limited this runner — no prices fetched")
 
 
 def _placeholder(item: Item) -> Price:

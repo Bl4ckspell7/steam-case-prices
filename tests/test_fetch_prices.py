@@ -4,8 +4,10 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+import requests
 
 from fetch_prices import (
+    RateLimited,
     _normalize_price,
     fetch_price,
     main,
@@ -40,7 +42,10 @@ def _assert_valid_prices(result: dict) -> None:
 
 @pytest.mark.integration
 def test_fetch_price_real_request():
-    result = fetch_price("Chroma Case")
+    try:
+        result = fetch_price("Chroma Case")
+    except RateLimited:
+        pytest.skip("Steam rate-limited this runner")
 
     assert result["name"] == "Chroma Case"
     _assert_valid_prices(result)
@@ -48,7 +53,10 @@ def test_fetch_price_real_request():
 
 @pytest.mark.integration
 def test_fetch_price_by_id_real_request():
-    result = fetch_price("Chroma Case", "G18DD1F3004")
+    try:
+        result = fetch_price("Chroma Case", "G18DD1F3004")
+    except RateLimited:
+        pytest.skip("Steam rate-limited this runner")
 
     assert result["name"] == "Chroma Case"
     assert result["id"] == "G18DD1F3004"
@@ -262,6 +270,44 @@ def test_fetch_price_retries_on_exception(mock_get, mock_sleep):
     assert mock_get.call_count == 3
 
 
+def _mock_429() -> MagicMock:
+    resp = MagicMock()
+    resp.status_code = 429
+    resp.raise_for_status.side_effect = requests.HTTPError("429 Too Many Requests")
+    return resp
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.SESSION.get")
+def test_fetch_price_all_429_raises_rate_limited(mock_get, mock_sleep):
+    mock_get.return_value = _mock_429()
+
+    with pytest.raises(RateLimited):
+        fetch_price("Chroma Case")
+
+    assert mock_get.call_count == 3
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.SESSION.get")
+def test_fetch_price_429_then_success_does_not_raise(mock_get, mock_sleep):
+    mock_get.side_effect = [
+        _mock_429(),
+        _mock_response(
+            {
+                "success": True,
+                "median_price": "6,50 €",
+                "lowest_price": "6,00 €",
+                "volume": "10",
+            }
+        ),
+    ]
+
+    result = fetch_price("Chroma Case")
+
+    assert result["median_price"] == "6,50 €"
+
+
 @patch("fetch_prices.time.sleep")
 @patch("fetch_prices.SESSION.get")
 def test_fetch_price_exhausted_retries_returns_none(mock_get, mock_sleep):
@@ -406,6 +452,64 @@ def test_main_merge_carries_over_unfetched(
     # Chroma 2 Case carried over verbatim, old timestamp intact
     assert prices["Chroma 2 Case"]["median_price"] == "9,99 €"
     assert prices["Chroma 2 Case"]["updated_at"] == "2020-01-01T00:00:00+00:00"
+
+
+def _seed_prices(entries: list[dict]) -> None:
+    Path("prices.json").write_text(
+        json.dumps({"updated_at": "2020-01-01T00:00:00+00:00", "prices": entries})
+    )
+
+
+_GOOD_PRIOR = {
+    "name": "Chroma Case",
+    "id": "G18DD1F3004",
+    "median_price": "9,99 €",
+    "lowest_price": "9,90 €",
+    "volume": "42",
+    "updated_at": "2020-01-01T00:00:00+00:00",
+}
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
+def test_main_failed_fetch_keeps_last_known_price(
+    mock_fetch_price, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)
+    _seed_prices([_GOOD_PRIOR])
+    # fetch "succeeds" but yields no price (429-exhausted or no listings)
+    mock_fetch_price.return_value = _null_price("Chroma Case")
+
+    main()
+
+    prices = {
+        e["name"]: e for e in json.loads(Path("prices.json").read_text())["prices"]
+    }
+    # the good prior price must survive, timestamp untouched
+    assert prices["Chroma Case"] == _GOOD_PRIOR
+
+
+@patch("fetch_prices.time.sleep")
+@patch("fetch_prices.fetch_price")
+def test_main_aborts_and_exits_when_rate_limited(
+    mock_fetch_price, mock_sleep, tmp_path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    _write_items(tmp_path / "items.json", _TEST_ITEMS)
+    _seed_prices([_GOOD_PRIOR])
+    mock_fetch_price.side_effect = RateLimited("Chroma Case")
+
+    with pytest.raises(SystemExit):
+        main()
+
+    # stopped after the first blocked item instead of grinding the rest
+    assert mock_fetch_price.call_count == 1
+    # snapshot still written, prior prices preserved
+    prices = {
+        e["name"]: e for e in json.loads(Path("prices.json").read_text())["prices"]
+    }
+    assert prices["Chroma Case"] == _GOOD_PRIOR
 
 
 @patch("fetch_prices.time.sleep")
