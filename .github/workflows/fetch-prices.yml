@@ -2,12 +2,13 @@ name: Fetch Steam Prices
 
 on:
     schedule:
-        # 4 slices, 1h apart → one run per hour, each item refreshed every 4h.
-        # Small per-run request count + 1h spacing keeps under Steam's per-IP block.
-        - cron: "0 0-23/4 * * *" # slice 0 → 00,04,08,12,16,20 UTC
-        - cron: "0 1-23/4 * * *" # slice 1 → 01,05,09,13,17,21 UTC
-        - cron: "0 2-23/4 * * *" # slice 2 → 02,06,10,14,18,22 UTC
-        - cron: "0 3-23/4 * * *" # slice 3 → 03,07,11,15,19,23 UTC
+        # 4 slices, 2h apart → one run every 2h, each item refreshed every 8h.
+        # Wide spacing lets Steam's per-IP budget recover between runs and keeps
+        # a slow (rate-limited) run from overlapping the next one.
+        - cron: "0 0-23/8 * * *" # slice 0 → 00,08,16 UTC
+        - cron: "0 2-23/8 * * *" # slice 1 → 02,10,18 UTC
+        - cron: "0 4-23/8 * * *" # slice 2 → 04,12,20 UTC
+        - cron: "0 6-23/8 * * *" # slice 3 → 06,14,22 UTC
     workflow_dispatch: # manual trigger — pick a slice (defaults to a safe 1/4 slice)
         inputs:
             slice_count:
@@ -18,6 +19,12 @@ on:
                 description: "Which slice to fetch, 0-based and < slice_count"
                 default: "0"
                 required: false
+
+# Never let two fetch runs overlap — concurrent runs burn the same per-IP
+# request budget and rate-limit each other.
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: false
 
 jobs:
     fetch:
@@ -44,10 +51,10 @@ jobs:
                   if [ -n "$SCHEDULE" ]; then
                       # scheduled run → slice is fixed by which cron line fired
                       case "$SCHEDULE" in
-                          "0 0-23/4 * * *") count=4; index=0 ;;
-                          "0 1-23/4 * * *") count=4; index=1 ;;
-                          "0 2-23/4 * * *") count=4; index=2 ;;
-                          "0 3-23/4 * * *") count=4; index=3 ;;
+                          "0 0-23/8 * * *") count=4; index=0 ;;
+                          "0 2-23/8 * * *") count=4; index=1 ;;
+                          "0 4-23/8 * * *") count=4; index=2 ;;
+                          "0 6-23/8 * * *") count=4; index=3 ;;
                           *) count=4; index=0 ;;
                       esac
                   else
