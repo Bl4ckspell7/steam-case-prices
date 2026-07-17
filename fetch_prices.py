@@ -21,6 +21,8 @@ TIMEOUT_SEC: int = 15
 SESSION: requests.Session = requests.Session()
 
 _DASH_CENTS = re.compile(r"(\d),--(\s*€)")
+# Steam separates thousands with a space ("1 127,42€"), which Sheets can't parse.
+_THOUSANDS_SEP = re.compile(r"(?<=\d)\s(?=\d)")
 _ITEM_ID = re.compile(r"G[0-9A-F]+$")
 
 # Item types whose market variants share one family listing ID.
@@ -69,9 +71,10 @@ def load_prices() -> dict[str, Price]:
 
 
 def _normalize_price(price: str | None) -> str | None:
-    """Convert prices like '6,--€' to '6,00€'."""
+    """Convert '6,--€' to '6,00€' and strip thousands separators ('1 127,42€')."""
     if price is None:
         return None
+    price = _THOUSANDS_SEP.sub("", price)
     return _DASH_CENTS.sub(r"\1,00\2", price)
 
 

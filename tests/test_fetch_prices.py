@@ -86,6 +86,20 @@ def test_normalize_price_none():
     assert _normalize_price(None) is None
 
 
+def test_normalize_price_strips_thousands_separator():
+    # Steam's real format for prices >= 1000, which Sheets cannot parse
+    assert _normalize_price("1 127,42€") == "1127,42€"
+    assert _normalize_price("1 234 567,89€") == "1234567,89€"
+
+
+def test_normalize_price_strips_non_breaking_space():
+    assert _normalize_price("1\xa0127,42€") == "1127,42€"
+
+
+def test_normalize_price_thousands_and_dash_cents():
+    assert _normalize_price("2 500,--€") == "2500,00€"
+
+
 # --- resolve_id ---
 
 
