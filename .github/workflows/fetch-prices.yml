@@ -2,13 +2,15 @@ name: Fetch Steam Prices
 
 on:
     schedule:
-        # 4 slices, 2h apart → one run every 2h, each item refreshed every 8h.
-        # Wide spacing lets Steam's per-IP budget recover between runs and keeps
-        # a slow (rate-limited) run from overlapping the next one.
-        - cron: "0 0-23/8 * * *" # slice 0 → 00,08,16 UTC
-        - cron: "0 2-23/8 * * *" # slice 1 → 02,10,18 UTC
-        - cron: "0 4-23/8 * * *" # slice 2 → 04,12,20 UTC
-        - cron: "0 6-23/8 * * *" # slice 3 → 06,14,22 UTC
+        # 4 slices, 2 cycles/day (morning + evening), 75 min apart → each item
+        # refreshed twice a day. Hours picked from the windows where runs
+        # historically succeed — outside them the shared GitHub runner IPs are
+        # already rate-limited by Steam before our first request. Off-hour
+        # minutes avoid the top-of-hour cron stampede and its long start delays.
+        - cron: "12 9,20 * * *" # slice 0 → 09:12, 20:12 UTC
+        - cron: "27 10,21 * * *" # slice 1 → 10:27, 21:27 UTC
+        - cron: "42 11,22 * * *" # slice 2 → 11:42, 22:42 UTC
+        - cron: "57 12,23 * * *" # slice 3 → 12:57, 23:57 UTC
     workflow_dispatch: # manual trigger — pick a slice (defaults to a safe 1/4 slice)
         inputs:
             slice_count:
@@ -51,10 +53,10 @@ jobs:
                   if [ -n "$SCHEDULE" ]; then
                       # scheduled run → slice is fixed by which cron line fired
                       case "$SCHEDULE" in
-                          "0 0-23/8 * * *") count=4; index=0 ;;
-                          "0 2-23/8 * * *") count=4; index=1 ;;
-                          "0 4-23/8 * * *") count=4; index=2 ;;
-                          "0 6-23/8 * * *") count=4; index=3 ;;
+                          "12 9,20 * * *") count=4; index=0 ;;
+                          "27 10,21 * * *") count=4; index=1 ;;
+                          "42 11,22 * * *") count=4; index=2 ;;
+                          "57 12,23 * * *") count=4; index=3 ;;
                           *) count=4; index=0 ;;
                       esac
                   else
