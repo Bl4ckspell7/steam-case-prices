@@ -7,6 +7,7 @@ import pytest
 import requests
 
 from fetch_prices import (
+    SESSION,
     RateLimited,
     _normalize_price,
     fetch_price,
@@ -118,6 +119,8 @@ def test_resolve_id_parses_redirect(mock_get):
 
     assert resolve_id("Chroma 2 Case") == "G18F91F3004"
     assert mock_get.call_args.kwargs["allow_redirects"] is False
+    # requests an HTML page, so announce text/html (not the JSON priceoverview)
+    assert mock_get.call_args.kwargs["headers"]["Accept"] == "text/html"
 
 
 @patch("fetch_prices.time.sleep")
@@ -202,6 +205,25 @@ def test_fetch_price_success(mock_get):
         "lowest_price": "6,00 €",
         "volume": "1,234",
     }
+
+
+def test_session_identifies_as_browser():
+    # Steam 429s obvious bot clients harder; never fall back to the default
+    # "python-requests/x.y" User-Agent.
+    assert "Mozilla" in SESSION.headers["User-Agent"]
+    assert "python-requests" not in SESSION.headers["User-Agent"]
+
+
+@patch("fetch_prices.SESSION.get")
+def test_fetch_price_sends_listing_referer(mock_get):
+    mock_get.return_value = _mock_response(
+        {"success": True, "median_price": "6,50 €", "lowest_price": None, "volume": "1"}
+    )
+
+    fetch_price("Chroma Case", "G18DD1F3004")
+
+    referer = mock_get.call_args.kwargs["headers"]["Referer"]
+    assert referer == "https://steamcommunity.com/market/listings/730/G18DD1F3004"
 
 
 @patch("fetch_prices.SESSION.get")

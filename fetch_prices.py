@@ -19,6 +19,18 @@ RETRY_BACKOFF_SEC: float = 60.0
 TIMEOUT_SEC: int = 15
 
 SESSION: requests.Session = requests.Session()
+SESSION.headers.update(
+    {
+        # Steam throttles obvious bot clients harder than browsers — the default
+        # python-requests UA gets 429'd where a browser UA is served. Refresh
+        # this to a current browser version every so often so it stays plausible.
+        "User-Agent": (
+            "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
+        ),
+        "Accept-Language": "de,en-US;q=0.7,en;q=0.3",
+    }
+)
+MARKET_URL: str = "https://steamcommunity.com/market/"
 
 _DASH_CENTS = re.compile(r"(\d),--(\s*€)")
 # Steam separates thousands with a space ("1 127,42€"), which Sheets can't parse.
@@ -113,7 +125,10 @@ def resolve_id(name: str) -> str | None:
 
     def attempt() -> str | None:
         resp: requests.Response = SESSION.get(
-            url, timeout=TIMEOUT_SEC, allow_redirects=False
+            url,
+            timeout=TIMEOUT_SEC,
+            allow_redirects=False,
+            headers={"Accept": "text/html", "Referer": MARKET_URL},
         )
         match = _ITEM_ID.search(resp.headers.get("Location", ""))
         return match.group(0) if match else None
@@ -142,11 +157,18 @@ def resolve_missing_ids(items: list[Item]) -> None:
 
 def fetch_price(name: str, item_id: str | None = None) -> PriceData:
     url: str = PRICE_URL + urlquote(item_id or name)
+    # A browser fetches the price box from the item's listing page, so send the
+    # matching Referer rather than none at all.
+    referer: str = LISTING_URL + urlquote(item_id or name)
     rate_limited: int = 0
 
     def attempt() -> PriceData | None:
         nonlocal rate_limited
-        resp: requests.Response = SESSION.get(url, timeout=TIMEOUT_SEC)
+        resp: requests.Response = SESSION.get(
+            url,
+            timeout=TIMEOUT_SEC,
+            headers={"Accept": "application/json", "Referer": referer},
+        )
         if resp.status_code == 429:
             rate_limited += 1
         resp.raise_for_status()
