@@ -1,100 +1,100 @@
 name: Fetch Steam Prices
 
 on:
-    schedule:
-        # 4 slices, 2 cycles/day (morning + evening), 75 min apart → each item
-        # refreshed twice a day. Hours picked from the windows where runs
-        # historically succeed — outside them the shared GitHub runner IPs are
-        # already rate-limited by Steam before our first request. Off-hour
-        # minutes avoid the top-of-hour cron stampede and its long start delays.
-        - cron: "12 9,20 * * *" # slice 0 → 09:12, 20:12 UTC
-        - cron: "27 10,21 * * *" # slice 1 → 10:27, 21:27 UTC
-        - cron: "42 11,22 * * *" # slice 2 → 11:42, 22:42 UTC
-        - cron: "57 12,23 * * *" # slice 3 → 12:57, 23:57 UTC
-    workflow_dispatch: # manual trigger — pick a slice (defaults to a safe 1/4 slice)
-        inputs:
-            slice_count:
-                description: "Number of slices (set to 1 for a full run; may hit the IP block)"
-                default: "4"
-                required: false
-            slice_index:
-                description: "Which slice to fetch, 0-based and < slice_count"
-                default: "0"
-                required: false
+  schedule:
+    # 4 slices, 2 cycles/day (morning + evening), 75 min apart → each item
+    # refreshed twice a day. Hours picked from the windows where runs
+    # historically succeed — outside them the shared GitHub runner IPs are
+    # already rate-limited by Steam before our first request. Off-hour
+    # minutes avoid the top-of-hour cron stampede and its long start delays.
+    - cron: "12 9,20 * * *" # slice 0 → 09:12, 20:12 UTC
+    - cron: "27 10,21 * * *" # slice 1 → 10:27, 21:27 UTC
+    - cron: "42 11,22 * * *" # slice 2 → 11:42, 22:42 UTC
+    - cron: "57 12,23 * * *" # slice 3 → 12:57, 23:57 UTC
+  workflow_dispatch: # manual trigger — pick a slice (defaults to a safe 1/4 slice)
+    inputs:
+      slice_count:
+        description: "Number of slices (set to 1 for a full run; may hit the IP block)"
+        default: "4"
+        required: false
+      slice_index:
+        description: "Which slice to fetch, 0-based and < slice_count"
+        default: "0"
+        required: false
 
 # Never let two fetch runs overlap — concurrent runs burn the same per-IP
 # request budget and rate-limit each other.
 concurrency:
-    group: ${{ github.workflow }}
-    cancel-in-progress: false
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 jobs:
-    fetch:
-        runs-on: ubuntu-latest
+  fetch:
+    runs-on: ubuntu-latest
 
-        permissions:
-            contents: write
+    permissions:
+      contents: write
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-            - name: Set up uv
-              uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
-              with:
-                  enable-cache: true
+      - name: Set up uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          enable-cache: true
 
-            - name: Determine slice
-              env:
-                  SCHEDULE: ${{ github.event.schedule }}
-                  INPUT_COUNT: ${{ github.event.inputs.slice_count }}
-                  INPUT_INDEX: ${{ github.event.inputs.slice_index }}
-              run: |
-                  if [ -n "$SCHEDULE" ]; then
-                      # scheduled run → slice is fixed by which cron line fired
-                      case "$SCHEDULE" in
-                          "12 9,20 * * *") count=4; index=0 ;;
-                          "27 10,21 * * *") count=4; index=1 ;;
-                          "42 11,22 * * *") count=4; index=2 ;;
-                          "57 12,23 * * *") count=4; index=3 ;;
-                          *) count=4; index=0 ;;
-                      esac
-                  else
-                      # manual dispatch → slice chosen via inputs (safe 1/4 default)
-                      count="${INPUT_COUNT:-4}"
-                      index="${INPUT_INDEX:-0}"
-                  fi
-                  echo "SLICE_COUNT=$count" >> "$GITHUB_ENV"
-                  echo "SLICE_INDEX=$index" >> "$GITHUB_ENV"
-                  echo "Fetching slice $index of $count"
+      - name: Determine slice
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT_COUNT: ${{ github.event.inputs.slice_count }}
+          INPUT_INDEX: ${{ github.event.inputs.slice_index }}
+        run: |
+          if [ -n "$SCHEDULE" ]; then
+              # scheduled run → slice is fixed by which cron line fired
+              case "$SCHEDULE" in
+                  "12 9,20 * * *") count=4; index=0 ;;
+                  "27 10,21 * * *") count=4; index=1 ;;
+                  "42 11,22 * * *") count=4; index=2 ;;
+                  "57 12,23 * * *") count=4; index=3 ;;
+                  *) count=4; index=0 ;;
+              esac
+          else
+              # manual dispatch → slice chosen via inputs (safe 1/4 default)
+              count="${INPUT_COUNT:-4}"
+              index="${INPUT_INDEX:-0}"
+          fi
+          echo "SLICE_COUNT=$count" >> "$GITHUB_ENV"
+          echo "SLICE_INDEX=$index" >> "$GITHUB_ENV"
+          echo "Fetching slice $index of $count"
 
-            - name: Seed existing prices
-              run: |
-                  git fetch origin data --depth 1 || true
-                  if git rev-parse --verify origin/data >/dev/null 2>&1; then
-                      # data branch exists → its snapshot MUST load, or fail the run
-                      # rather than commit a snapshot that wipes the carried-over items
-                      git show origin/data:prices.json > prices.json
-                  else
-                      echo '{"prices":[]}' > prices.json # genuine first-run bootstrap
-                  fi
+      - name: Seed existing prices
+        run: |
+          git fetch origin data --depth 1 || true
+          if git rev-parse --verify origin/data >/dev/null 2>&1; then
+              # data branch exists → its snapshot MUST load, or fail the run
+              # rather than commit a snapshot that wipes the carried-over items
+              git show origin/data:prices.json > prices.json
+          else
+              echo '{"prices":[]}' > prices.json # genuine first-run bootstrap
+          fi
 
-            - name: Fetch prices
-              run: uv run fetch_prices.py
-              env:
-                  PYTHONUNBUFFERED: "1" # stream per-item progress live to the log
+      - name: Fetch prices
+        run: uv run fetch_prices.py
+        env:
+          PYTHONUNBUFFERED: "1" # stream per-item progress live to the log
 
-            - name: Configure git
-              run: |
-                  git config user.name "github-actions"
-                  git config user.email "github-actions@github.com"
+      - name: Configure git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-            - name: Commit results to data branch
-              run: |
-                  cp prices.json /tmp/prices.json
-                  git fetch origin data
-                  git checkout --force data
-                  cp /tmp/prices.json prices.json
-                  git add prices.json
-                  git diff --cached --quiet || git commit -m "Update prices $(date -u +'%Y-%m-%d %H-%M-%S')"
-                  git push origin data
+      - name: Commit results to data branch
+        run: |
+          cp prices.json /tmp/prices.json
+          git fetch origin data
+          git checkout --force data
+          cp /tmp/prices.json prices.json
+          git add prices.json
+          git diff --cached --quiet || git commit -m "Update prices $(date -u +'%Y-%m-%d %H-%M-%S')"
+          git push origin data
