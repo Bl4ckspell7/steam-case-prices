@@ -55,7 +55,9 @@ uv run ruff format
 
 ## Upgrading dependencies
 
-Remove and re-add to bump the version floors in `pyproject.toml`:
+[Renovate](https://docs.renovatebot.com) runs daily via the `renovate` workflow and opens PRs for GitHub Actions, Python dependencies (`pyproject.toml` + `uv.lock`) and the Python version. Config: [renovate.json](renovate.json). It needs a fine-grained PAT with access to this repo (Contents, Commit statuses, Issues, Pull requests, Workflows: read & write; Dependabot alerts: read-only) as the repository secret `RENOVATE_TOKEN`.
+
+To bump the version floors in `pyproject.toml` manually, remove and re-add:
 
 ```bash
 uv remove requests && uv add requests
