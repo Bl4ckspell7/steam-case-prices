@@ -3,7 +3,7 @@ import os
 import re
 import time
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TypedDict
 from urllib.parse import quote as urlquote
 
@@ -110,7 +110,7 @@ def _with_retries[T](attempt_fn: Callable[[], T | None], failure_msg: str) -> T 
                 return result
 
             print(f"  attempt {attempt}/{MAX_RETRIES} failed: {failure_msg}")
-        except Exception as e:
+        except requests.RequestException as e:
             print(f"  attempt {attempt}/{MAX_RETRIES} failed: {e}")
 
         if attempt < MAX_RETRIES:
@@ -209,7 +209,7 @@ def main() -> None:
 
     slice_count, slice_index = _read_slice_env()
     existing: dict[str, Price] = load_prices()
-    now: str = datetime.now(timezone.utc).isoformat()
+    now: str = datetime.now(UTC).isoformat()
 
     # Fetch only this run's slice (stride: items i, i+count, i+2*count, …) and
     # carry over everything else from the previous snapshot, so a short run stays
