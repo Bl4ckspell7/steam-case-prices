@@ -16,7 +16,6 @@ from fetch_prices import (
     resolve_missing_ids,
 )
 
-
 # --- integration ---
 
 
@@ -288,8 +287,8 @@ def test_fetch_price_retries_on_success_false(mock_get, mock_sleep):
 @patch("fetch_prices.SESSION.get")
 def test_fetch_price_retries_on_exception(mock_get, mock_sleep):
     mock_get.side_effect = [
-        Exception("timeout"),
-        Exception("timeout"),
+        requests.Timeout("timeout"),
+        requests.Timeout("timeout"),
         _mock_response(
             {
                 "success": True,
@@ -347,7 +346,7 @@ def test_fetch_price_429_then_success_does_not_raise(mock_get, mock_sleep):
 @patch("fetch_prices.time.sleep")
 @patch("fetch_prices.SESSION.get")
 def test_fetch_price_exhausted_retries_returns_none(mock_get, mock_sleep):
-    mock_get.side_effect = Exception("timeout")
+    mock_get.side_effect = requests.Timeout("timeout")
 
     result = fetch_price("Chroma Case", "G18DD1F3004")
 
