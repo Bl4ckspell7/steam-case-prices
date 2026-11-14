@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-14T00:52:04.162451+00:00",
+  "updated_at": "2026-11-14T01:34:28.105509+00:00",
   "prices": [
     {
       "name": "10 Year Birthday Sticker Capsule",
@@ -12,10 +12,10 @@
     {
       "name": "2021 Community Sticker Capsule",
       "id": "G18AE253004",
-      "median_price": "0,75€",
+      "median_price": "0,90€",
       "lowest_price": null,
-      "volume": "16",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "21",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "AUG | Eye of Zapems (Minimal Wear)",
@@ -46,8 +46,8 @@
       "id": "G18E0253004",
       "median_price": "0,48€",
       "lowest_price": null,
-      "volume": "573",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "522",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Antwerp 2022 Viewer Pass",
@@ -108,10 +108,10 @@
     {
       "name": "CS:GO Patch Pack",
       "id": "G1882243004",
-      "median_price": "1,48€",
+      "median_price": "1,49€",
       "lowest_price": null,
-      "volume": "27",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "33",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "CS:GO Weapon Case",
@@ -140,10 +140,10 @@
     {
       "name": "CZ75-Auto | Indigo (Minimal Wear)",
       "id": null,
-      "median_price": "4,03€",
-      "lowest_price": "3,39€",
+      "median_price": "3,40€",
+      "lowest_price": "3,49€",
       "volume": "2",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "CZ75-Auto | Syndicate (Field-Tested)",
@@ -172,10 +172,10 @@
     {
       "name": "Chroma Case",
       "id": "G18DD1F3004",
-      "median_price": "5,31€",
+      "median_price": "5,32€",
       "lowest_price": null,
-      "volume": "760",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "739",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Clutch Case",
@@ -204,10 +204,10 @@
     {
       "name": "Copenhagen 2024 Viewer Pass + 3 Souvenir Tokens",
       "id": "G18B9263004",
-      "median_price": "24,60€",
+      "median_price": "24,70€",
       "lowest_price": null,
       "volume": "1",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Danger Zone Case",
@@ -236,10 +236,10 @@
     {
       "name": "Dual Berettas | Briar (Minimal Wear)",
       "id": null,
-      "median_price": "2,01€",
-      "lowest_price": "1,89€",
+      "median_price": "1,91€",
+      "lowest_price": "2,00€",
       "volume": "11",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Dual Berettas | Oil Change (Minimal Wear)",
@@ -270,8 +270,8 @@
       "id": "G18FB1F3004",
       "median_price": "1,64€",
       "lowest_price": null,
-      "volume": "1,834",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "1,636",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Fever Case",
@@ -300,10 +300,10 @@
     {
       "name": "Gamma 2 Case",
       "id": "G18B9213004",
-      "median_price": "3,27€",
+      "median_price": "3,35€",
       "lowest_price": null,
-      "volume": "2,676",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "3,346",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Gamma Case",
@@ -334,8 +334,8 @@
       "id": "G1887243004",
       "median_price": "1,69€",
       "lowest_price": null,
-      "volume": "5",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "2",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Halo Capsule",
@@ -366,8 +366,8 @@
       "id": "G18A8263004",
       "median_price": "0,11€",
       "lowest_price": null,
-      "volume": "66,125",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "65,607",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "MP5-SD | Acid Wash (Battle-Scarred)",
@@ -396,10 +396,10 @@
     {
       "name": "MP9 | Airlock (Factory New)",
       "id": null,
-      "median_price": "20,63€",
-      "lowest_price": "22,91€",
+      "median_price": "20,72€",
+      "lowest_price": "22,86€",
       "volume": "1",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "MP9 | Army Sheen (Factory New)",
@@ -428,10 +428,10 @@
     {
       "name": "Operation Breakout Weapon Case",
       "id": "G18B21F3004",
-      "median_price": "8,64€",
+      "median_price": "8,77€",
       "lowest_price": null,
-      "volume": "1,988",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "2,392",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Operation Broken Fang Case",
@@ -460,10 +460,10 @@
     {
       "name": "Operation Phoenix Weapon Case",
       "id": "G18AB1F3004",
-      "median_price": "3,91€",
+      "median_price": "3,96€",
       "lowest_price": null,
-      "volume": "1,514",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "1,789",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Operation Riptide Case",
@@ -492,10 +492,10 @@
     {
       "name": "Operation Vanguard Weapon Case",
       "id": "G18BD1F3004",
-      "median_price": "4,82€",
+      "median_price": "4,86€",
       "lowest_price": null,
-      "volume": "373",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "381",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Operation Wildfire Case",
@@ -524,10 +524,10 @@
     {
       "name": "Paris 2023 Ancient Souvenir Package",
       "id": "G18A1263004",
-      "median_price": "3,63€",
+      "median_price": "3,51€",
       "lowest_price": null,
-      "volume": "16",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "28",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Paris 2023 Anubis Souvenir Package",
@@ -556,10 +556,10 @@
     {
       "name": "Paris 2023 Champions Autograph Capsule",
       "id": "G18A7263004",
-      "median_price": "0,21€",
+      "median_price": "0,22€",
       "lowest_price": null,
-      "volume": "422",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "387",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Paris 2023 Contenders Autograph Capsule",
@@ -590,8 +590,8 @@
       "id": "G18A4263004",
       "median_price": "0,15€",
       "lowest_price": null,
-      "volume": "1,125",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "1,063",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Paris 2023 Legends Sticker Capsule",
@@ -620,10 +620,10 @@
     {
       "name": "Paris 2023 Overpass Souvenir Package",
       "id": "G18A0263004",
-      "median_price": "2,39€",
+      "median_price": "2,41€",
       "lowest_price": null,
-      "volume": "77",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "51",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Paris 2023 Vertigo Souvenir Package",
@@ -652,10 +652,10 @@
     {
       "name": "Prisma 2 Case",
       "id": "G18D7243004",
-      "median_price": "1,11€",
+      "median_price": "1,12€",
       "lowest_price": null,
-      "volume": "7,871",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "9,612",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Prisma Case",
@@ -686,8 +686,8 @@
       "id": "G18DA203004",
       "median_price": "2,88€",
       "lowest_price": null,
-      "volume": "2,438",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "2,763",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Rio 2022 Viewer Pass",
@@ -717,9 +717,9 @@
       "name": "SG 553 | Barricade (Factory New)",
       "id": null,
       "median_price": null,
-      "lowest_price": "8,17€",
+      "lowest_price": "8,21€",
       "volume": null,
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "SG 553 | Candy Apple (Field-Tested)",
@@ -748,10 +748,10 @@
     {
       "name": "Shanghai 2024 Viewer Pass",
       "id": "G18DD263004",
-      "median_price": "9,01€",
+      "median_price": "9,57€",
       "lowest_price": null,
       "volume": "4",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Shanghai 2024 Viewer Pass + 3 Souvenir Tokens",
@@ -780,10 +780,10 @@
     {
       "name": "Snakebite Case",
       "id": "G188B253004",
-      "median_price": "0,36€",
+      "median_price": "0,35€",
       "lowest_price": null,
-      "volume": "6,735",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "6,911",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Spectrum 2 Case",
@@ -812,10 +812,10 @@
     {
       "name": "StatTrak™ M4A1-S | Mecha Industries (Field-Tested)",
       "id": null,
-      "median_price": "99,77€",
-      "lowest_price": "116,11€",
+      "median_price": "100,18€",
+      "lowest_price": "101,78€",
       "volume": "3",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "StatTrak™ MP9 | Airlock (Factory New)",
@@ -876,10 +876,10 @@
     {
       "name": "Sticker | Battle Scarred (Holo)",
       "id": "G18B90930046205080010D324",
-      "median_price": "6,96€",
+      "median_price": "7,82€",
       "lowest_price": null,
-      "volume": "14",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "17",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Sticker | FURIA (Holo) | 2020 RMR",
@@ -910,8 +910,8 @@
       "id": "G18B90930046205080010DA33",
       "median_price": "2,02€",
       "lowest_price": null,
-      "volume": "48",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "62",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Sticker | FURIA (Holo) | Rio 2022",
@@ -972,10 +972,10 @@
     {
       "name": "Sticker | TYLOO | 2020 RMR",
       "id": "G18B90930046205080010B925",
-      "median_price": "0,10€",
+      "median_price": "0,12€",
       "lowest_price": null,
-      "volume": "196",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "175",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "Sticker | chrisJ | Boston 2018",
@@ -1004,10 +1004,10 @@
     {
       "name": "Sugarface Capsule",
       "id": "G18BA213004",
-      "median_price": "0,86€",
+      "median_price": "0,84€",
       "lowest_price": null,
-      "volume": "60",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "13",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "The Boardroom Sticker Capsule",
@@ -1038,8 +1038,8 @@
       "id": "G18BC243004",
       "median_price": "2,25€",
       "lowest_price": null,
-      "volume": "5",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "6",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "XM1014 | Charter (Factory New)",
@@ -1068,10 +1068,10 @@
     {
       "name": "eSports 2013 Winter Case",
       "id": "G18A51F3004",
-      "median_price": "14,43€",
+      "median_price": "14,50€",
       "lowest_price": null,
-      "volume": "130",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "volume": "141",
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "eSports 2014 Summer Case",
@@ -1100,10 +1100,10 @@
     {
       "name": "★ Butterfly Knife | Forest DDPAT (Field-Tested)",
       "id": null,
-      "median_price": "468,92€",
-      "lowest_price": "495,96€",
+      "median_price": "470,83€",
+      "lowest_price": "479,46€",
       "volume": "2",
-      "updated_at": "2026-11-13T17:57:34.097705+00:00"
+      "updated_at": "2026-11-14T01:34:28.105509+00:00"
     },
     {
       "name": "★ Talon Knife | Crimson Web (Field-Tested)",
